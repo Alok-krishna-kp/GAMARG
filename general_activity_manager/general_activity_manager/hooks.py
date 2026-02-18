@@ -1,10 +1,15 @@
 app_name = "general_activity_manager"
 app_title = "General Activity Manager"
 app_publisher = "gamarg"
-app_description = "an app fortracking verifying your college achievements in one place"
+app_description = "An app to track and verify your college achievements in one place"
 app_email = "alokkrishnakp524741@gmail.com"
 app_license = "mit"
-
+fixtures = [
+    {"dt": "Workflow", "filters": [["name", "in", ["Activity Approval Process"]]]},
+    {"dt": "Role", "filters": [["name", "in", ["Student", "Faculty", "Department Head"]]]},
+    {"dt": "Custom DocPerm", "filters": [["parent", "=", "Activity Management"]]},
+    "Web Page"
+]
 # Apps
 # ------------------
 

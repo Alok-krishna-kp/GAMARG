@@ -1,6 +1,6 @@
 ### General Activity Manager
 
-An app to track and verify your college achievements in one place
+an app fortracking verifying your college achievements in one place
 
 ### Installation
 

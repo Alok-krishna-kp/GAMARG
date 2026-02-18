@@ -3,7 +3,7 @@ name = "general_activity_manager"
 authors = [
     { name = "gamarg", email = "alokkrishnakp524741@gmail.com"}
 ]
-description = "An app to track and verify your college achievements in one place"
+description = "an app fortracking verifying your college achievements in one place"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
