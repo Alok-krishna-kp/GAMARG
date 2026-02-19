@@ -1,7 +1,18 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env
+.venv
+env/
+venv/
+
+# Frappe specific
+*.log
+node_modules/
 .DS_Store
-*.pyc
-*.egg-info
-*.swp
-tags
-node_modules
-__pycache__
+
+# Local configuration
+site_config.json

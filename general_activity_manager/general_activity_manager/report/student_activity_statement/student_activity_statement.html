@@ -1,0 +1,67 @@
+<style>
+    .portfolio-container { padding: 20px; font-family: sans-serif; }
+    
+    .participant-header { 
+        margin-top: 40px; 
+        padding-bottom: 10px;
+        border-bottom: 3px solid #007bff; 
+        color: #1a202c;
+        text-transform: uppercase;
+    }
+
+    .activity-card { 
+        border: 1px solid #e2e8f0; 
+        padding: 20px; 
+        margin: 20px 0; 
+        border-radius: 8px; 
+        page-break-inside: avoid; 
+    }
+
+    .event-meta { color: #718096; font-size: 0.9em; margin-bottom: 10px; }
+    .photo-thumb { width: 100%; max-width: 300px; border-radius: 6px; margin-top: 10px; border: 1px solid #ddd; }
+
+    /* Print styling for Page Breaks */
+    @media print {
+        .participant-header {
+            page-break-before: always;
+        }
+        .participant-header:first-of-type {
+            page-break-before: avoid;
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
+
+<div class="portfolio-container">
+    <div class="text-center">
+        <h1>Student Activity Summary</h1>
+        <hr>
+    </div>
+
+    {% 
+        var last_participant = ""; 
+        for(var i=0, l=data.length; i<l; i++) { 
+            var row = data[i]; 
+    %}
+        
+        {% if (row.participant !== last_participant) { %}
+            <h2 class="participant-header">{%= row.participant %}</h2>
+        {% 
+            last_participant = row.participant;
+        } %}
+
+        <div class="activity-card">
+            <h3 style="margin:0;">{%= row.event_name %}</h3>
+            <div class="event-meta">
+                {%= row.category %} | {%= frappe.datetime.str_to_user(row.event_date) %} | 
+                <strong>Status:</strong> {%= row.status %}
+            </div>
+
+            {% if (row.photos) { %}
+                <img src="{%= row.photos %}" class="photo-thumb">
+            {% } %}
+        </div>
+    {% } %}
+</div>

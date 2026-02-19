@@ -13,7 +13,8 @@
   "event_date",
   "certificate",
   "status",
-  "amended_from"
+  "amended_from",
+  "photos"
  ],
  "fields": [
   {
@@ -78,13 +79,19 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "photos",
+   "fieldtype": "Table",
+   "label": "Photos",
+   "options": "Activity Event Photo"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-18 22:32:14.292694",
+ "modified": "2026-02-19 00:07:17.657980",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",

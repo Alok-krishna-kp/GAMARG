@@ -1,0 +1,37 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-02-19 00:16:05.309846",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": null,
+ "modified": "2026-02-19 00:16:05.309846",
+ "modified_by": "Administrator",
+ "module": "General Activity Manager",
+ "name": "Student Actiivity Statement",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Activity Management",
+ "report_name": "Student Actiivity Statement",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Student"
+  },
+  {
+   "role": "Faculty"
+  },
+  {
+   "role": "Department Head"
+  }
+ ],
+ "timeout": 0
+}
