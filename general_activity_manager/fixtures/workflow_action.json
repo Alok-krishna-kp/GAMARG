@@ -16,5 +16,23 @@
   "status": "Open",
   "user": null,
   "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-03-03 23:03:13.291639",
+  "name": "4bsa67auue",
+  "permitted_roles": [
+   {
+    "role": "Student"
+   }
+  ],
+  "reference_doctype": "Activity Management",
+  "reference_name": "4bsqgbb1c5",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Draft"
  }
 ]
