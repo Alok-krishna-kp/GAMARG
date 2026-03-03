@@ -7,9 +7,16 @@ an app fortracking verifying your college achievements in one place
 You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 
 ```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app general_activity_manager
+pip install frappe-bench
+bench init frappe-bench --frappe-branch version-16
+cd frappe-bench
+bench new-site mysite.local
+bench get-app https://github.com/Alok-krishna-kp/GAMARG --branch develop
+bench --site mysite.local install-app general_activity_manager
+bench set-config developer_mode 1
+bench use mysite.local
+bench migrate
+bench start
 ```
 
 ### Contributing
