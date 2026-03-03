@@ -8,7 +8,11 @@ app_license = "mit"
 fixtures = [
     "Role",
     "Custom DocPerm",
+    "Custom Role",
     "Web Form",
+    "Workflow",
+    "Workflow State",
+    "Workflow Action",
 ]
 
 # on_login = "general_activity_manager.utils.redirect_gamarg_user"
