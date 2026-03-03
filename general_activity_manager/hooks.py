@@ -5,6 +5,18 @@ app_description = "an app fortracking verifying your college achievements in one
 app_email = "alokkrishnakp524741@gmail.com"
 app_license = "mit"
 
+fixtures = [
+    "Role",
+    "Custom DocPerm",
+    "Web Form",
+]
+
+# on_login = "general_activity_manager.utils.redirect_gamarg_user"
+
+# website_redirects = [
+#     {"source": "/", "target": "/"},
+# ]
+
 # Apps
 # ------------------
 
