@@ -15,8 +15,8 @@ bench get-app https://github.com/Alok-krishna-kp/GAMARG --branch develop
 bench --site mysite.local install-app general_activity_manager
 bench set-config developer_mode 1
 bench use mysite.local
-bench migrate
 bench start
+bench --site mysite.local migrate
 ```
 
 ### Contributing
