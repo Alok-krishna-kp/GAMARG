@@ -19,9 +19,9 @@
  "fields": [
   {
    "fieldname": "participant",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Participant",
-   "options": "User",
+   "options": "Student",
    "reqd": 1
   },
   {
@@ -91,25 +91,12 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-03 20:49:11.253329",
+ "modified": "2026-03-07 13:28:21.705907",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",
  "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
+ "permissions": [],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "search_fields": "event_name",

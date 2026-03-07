@@ -1,0 +1,108 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:uni_reg_no",
+ "creation": "2026-03-07 12:52:44.381275",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "fname",
+  "lname",
+  "department",
+  "roll_no",
+  "clg_reg_no",
+  "uni_reg_no"
+ ],
+ "fields": [
+  {
+   "fieldname": "fname",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "options": "Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "lname",
+   "fieldtype": "Data",
+   "label": "Last Name",
+   "options": "Name"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Department",
+   "options": "CSE\nECE\nEEE\nCEE\nME",
+   "reqd": 1
+  },
+  {
+   "fieldname": "roll_no",
+   "fieldtype": "Int",
+   "label": "Roll No."
+  },
+  {
+   "fieldname": "clg_reg_no",
+   "fieldtype": "Data",
+   "label": "College Register No."
+  },
+  {
+   "fieldname": "uni_reg_no",
+   "fieldtype": "Data",
+   "label": "University Register No.",
+   "unique": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-07 13:04:46.242007",
+ "modified_by": "Administrator",
+ "module": "General Activity Manager",
+ "name": "Student",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Dept.Head",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Faculty",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
