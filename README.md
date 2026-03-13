@@ -11,12 +11,13 @@ pip install frappe-bench
 bench init frappe-bench --frappe-branch version-16
 cd frappe-bench
 bench new-site mysite.local
-bench get-app https://github.com/Alok-krishna-kp/GAMARG --branch develop
-bench --site mysite.local install-app general_activity_manager
-bench set-config developer_mode 1
-bench use mysite.local
+bench get-app https://github.com/nihancj/GAMARG --branch develop
 bench start
+bench --site mysite.local install-app general_activity_manager
+bench --site mysite.local set-config developer_mode 1
+bench use mysite.local
 bench --site mysite.local migrate
+bench restart
 ```
 
 ### Contributing
