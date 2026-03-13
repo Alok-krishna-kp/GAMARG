@@ -19,9 +19,9 @@
  "fields": [
   {
    "fieldname": "participant",
-   "fieldtype": "Link",
+   "fieldtype": "Dynamic Link",
    "label": "Participant",
-   "options": "Student",
+   "options": "participant_type",
    "reqd": 1
   },
   {
@@ -91,7 +91,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-13 13:59:59.850949",
+ "modified": "2026-03-13 14:06:17.823059",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",
