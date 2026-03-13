@@ -12,7 +12,6 @@ fixtures = [
     "Web Form",
     "Workflow",
     "Workflow State",
-    "Workflow Action",
     "Workflow Action Master",
     "Web Page",
 ]

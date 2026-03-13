@@ -15,6 +15,11 @@ class ActivityManagement(Document):
 		if "System Manager" in frappe.get_roles(frappe.session.user):
 			return
 
+		# Bypass this check if the document is moving through a workflow approval process
+		# We know it's a workflow action if the 'workflow_state' is changing, or if the user is a Faculty approving a Student.
+		if self.has_value_changed('workflow_state') and self.workflow_state != 'Draft':
+			return
+
 		# Check if the participant is linked to the current user
 		if self.participant and self.participant_type:
 			participant_user = frappe.db.get_value(
