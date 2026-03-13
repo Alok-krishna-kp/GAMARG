@@ -26,9 +26,9 @@
   },
   {
    "fieldname": "department",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Department",
-   "options": "CSE\nECE\nEEE\nCEE\nME",
+   "options": "Department",
    "reqd": 1
   },
   {
@@ -91,7 +91,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-07 13:28:21.705907",
+ "modified": "2026-03-13 13:42:37.067175",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",

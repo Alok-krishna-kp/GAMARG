@@ -17,15 +17,15 @@
   },
   {
    "fieldname": "department",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Department",
-   "options": "CSE\nECE\nEEE\nCEE\nME"
+   "options": "Department"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-07 13:15:25.374889",
+ "modified": "2026-03-13 13:42:52.722024",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Faculty",

@@ -30,10 +30,10 @@
   },
   {
    "fieldname": "department",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Department",
-   "options": "CSE\nECE\nEEE\nCEE\nME",
+   "options": "Department",
    "reqd": 1
   },
   {
@@ -56,7 +56,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-07 13:04:46.242007",
+ "modified": "2026-03-13 13:43:08.953748",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Student",
