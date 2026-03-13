@@ -4,6 +4,7 @@ app_publisher = "gamarg"
 app_description = "an app fortracking verifying your college achievements in one place"
 app_email = "alokkrishnakp524741@gmail.com"
 app_license = "mit"
+
 fixtures = [
     "Role",
     "Custom DocPerm",
