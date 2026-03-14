@@ -1,0 +1,66 @@
+{
+ "app": "general_activity_manager",
+ "charts": [],
+ "content": "[{\"id\":\"n1DL0zm-nd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">HOD_Workspace</span>\",\"col\":12}},{\"id\":\"k5_q_MIABt\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Activities\",\"col\":10}},{\"id\":\"ynN_pNN03f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Manage</b></span>\",\"col\":12}},{\"id\":\"oo2u0au4dI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activities\",\"col\":3}},{\"id\":\"JEmHLjbZqQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculties\",\"col\":3}},{\"id\":\"DcBWjBU-pT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Students\",\"col\":3}}]",
+ "creation": "2026-03-14 11:19:38.364038",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "arrow-down-right",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "HOD_Workspace",
+ "links": [],
+ "modified": "2026-03-13 22:45:09.104735",
+ "modified_by": "Administrator",
+ "module": "General Activity Manager",
+ "name": "HOD_Workspace",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [
+  {
+   "document_type": "Activity Management",
+   "label": "Activities",
+   "quick_list_filter": "[]"
+  }
+ ],
+ "roles": [
+  {
+   "role": "Dept.Head"
+  }
+ ],
+ "sequence_id": 28.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Activities",
+   "link_to": "Activity Management",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Faculties",
+   "link_to": "Faculty",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Students",
+   "link_to": "Student",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "HOD_Workspace",
+ "type": "Workspace"
+}
