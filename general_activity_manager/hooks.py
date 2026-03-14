@@ -13,6 +13,7 @@ fixtures = [
     "Workflow",
     "Workflow State",
     "Workflow Action",
+    "Workflow Action Master",
     "Web Page",
 ]
 
