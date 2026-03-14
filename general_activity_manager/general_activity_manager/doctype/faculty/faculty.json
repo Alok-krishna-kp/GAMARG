@@ -6,7 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "name1",
-  "department"
+  "department",
+  "user"
  ],
  "fields": [
   {
@@ -20,12 +21,18 @@
    "fieldtype": "Link",
    "label": "Department",
    "options": "Department"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-13 13:42:52.722024",
+ "modified": "2026-03-13 17:31:00.416931",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Faculty",
