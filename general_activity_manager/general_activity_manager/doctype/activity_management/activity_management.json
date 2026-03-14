@@ -12,7 +12,6 @@
   "category",
   "event_date",
   "certificate",
-  "status",
   "amended_from",
   "photos"
  ],
@@ -57,13 +56,6 @@
    "label": "Certificate"
   },
   {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nPending Verification\nVerified\nRejected",
-   "reqd": 1
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -91,7 +83,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-13 14:06:17.823059",
+ "modified": "2026-03-13 20:21:14.688417",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",
