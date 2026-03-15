@@ -16,7 +16,7 @@ fixtures = [
     "Web Page",
 ]
 
-# on_login = "general_activity_manager.utils.redirect_gamarg_user"
+on_login = "general_activity_manager.utils.redirect_gamarg_user"
 
 # website_redirects = [
 #     {"source": "/", "target": "/"},
