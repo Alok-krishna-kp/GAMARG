@@ -19,6 +19,7 @@
   {
    "fieldname": "participant",
    "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
    "label": "Participant",
    "options": "participant_type",
    "reqd": 1
@@ -83,7 +84,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-13 20:21:14.688417",
+ "modified": "2026-03-18 17:05:18.668047",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",

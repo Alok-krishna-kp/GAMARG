@@ -63,7 +63,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-13 17:31:50.586714",
+ "modified": "2026-03-18 17:02:03.495723",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Student",
@@ -109,7 +109,9 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "fname"
 }
