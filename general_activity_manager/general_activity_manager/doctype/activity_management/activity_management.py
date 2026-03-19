@@ -9,6 +9,11 @@ from frappe import _
 class ActivityManagement(Document):
 	def validate(self):
 		self.validate_participant_user()
+		self.validate_date()
+
+	def validate_date(self):
+		if self.event_date and frappe.utils.getdate(self.event_date) > frappe.utils.getdate(frappe.utils.today()):
+			frappe.throw(_("Event Date cannot be in the future."))
 
 	def validate_participant_user(self):
 		# If user is System Manager, they can do anything

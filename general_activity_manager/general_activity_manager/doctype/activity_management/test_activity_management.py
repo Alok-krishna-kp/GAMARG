@@ -208,3 +208,17 @@ class TestActivityManagement(FrappeTestCase):
 		})
 		doc.insert() # Should pass as per Dept.Head role in python code
 		self.assertTrue(doc.name)
+
+	def test_date_validation(self):
+		frappe.set_user(self.student_user)
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Student",
+			"participant": self.student_name,
+			"department": "Test Dept",
+			"event_name": "Future Event",
+			"category": "Seminar",
+			"event_date": frappe.utils.add_days(frappe.utils.today(), 1)
+		})
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
