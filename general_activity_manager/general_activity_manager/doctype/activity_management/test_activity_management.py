@@ -64,6 +64,19 @@ class TestActivityManagement(FrappeTestCase):
 				"user": self.faculty_user
 			}).insert()
 
+		# Create another Faculty for negative testing
+		self.other_faculty_name = "FAC-002"
+		self.other_faculty_user = "other_faculty@example.com"
+		self.create_test_user(self.other_faculty_user, "Faculty")
+		if not frappe.db.exists("Faculty", self.other_faculty_name):
+			frappe.get_doc({
+				"doctype": "Faculty",
+				"id": self.other_faculty_name,
+				"name1": "Prof. Y",
+				"department": "Test Dept",
+				"user": self.other_faculty_user
+			}).insert()
+
 	def create_test_user(self, email, role):
 		if not frappe.db.exists("User", email):
 			user = frappe.get_doc({
@@ -102,6 +115,35 @@ class TestActivityManagement(FrappeTestCase):
 			"participant": self.other_student_name,
 			"department": "Test Dept",
 			"event_name": "Impersonation Attempt",
+			"category": "Seminar",
+			"event_date": frappe.utils.today()
+		})
+		# This should raise ValidationError due to our participant validation logic
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
+
+	def test_faculty_can_create_own_activity(self):
+		frappe.set_user(self.faculty_user)
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Faculty",
+			"participant": self.faculty_name,
+			"department": "Test Dept",
+			"event_name": "My Great Faculty Event",
+			"category": "Seminar",
+			"event_date": frappe.utils.today()
+		})
+		doc.insert()
+		self.assertTrue(doc.name)
+
+	def test_faculty_cannot_create_others_activity(self):
+		frappe.set_user(self.faculty_user)
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Faculty",
+			"participant": self.other_faculty_name,
+			"department": "Test Dept",
+			"event_name": "My Great Faculty Event",
 			"category": "Seminar",
 			"event_date": frappe.utils.today()
 		})
