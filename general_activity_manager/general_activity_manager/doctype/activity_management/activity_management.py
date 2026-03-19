@@ -17,25 +17,43 @@ class ActivityManagement(Document):
 
 	def validate_participant_user(self):
 		# If user is System Manager, they can do anything
-		if "System Manager" in frappe.get_roles(frappe.session.user):
-			return
-
-		# Bypass this check if the document is moving through a workflow approval process
-		# We know it's a workflow action if it's an existing doc and the 'workflow_state' is changing
-		if not self.is_new() and self.has_value_changed('workflow_state'):
+		roles = frappe.get_roles(frappe.session.user)
+		if "System Manager" in roles:
 			return
 
 		# Check if the participant is linked to the current user
+		participant_user = None
 		if self.participant and self.participant_type:
 			participant_user = frappe.db.get_value(
 				self.participant_type, 
 				self.participant, 
 				'user'
 			)
-			if participant_user and participant_user != frappe.session.user:
-				# If the participant has a linked user and it's not the current user
-				# Check if the current user is a Dept.Head for that department
-				if "Dept.Head" in frappe.get_roles(frappe.session.user):
-					pass # Dept.Heads can submit for others (this logic can be tightened to check department match if needed)
-				else:
-					frappe.throw(_("You can only create or edit activities for yourself."))
+
+		# If the current user is NOT the participant, we need to check their and their department's access
+		if participant_user != frappe.session.user:
+			is_workflow_action = not self.is_new() and self.has_value_changed('workflow_state')
+			
+			if "Faculty" in roles:
+				user_dept = frappe.db.get_value("Faculty", {"user": frappe.session.user}, "department")
+
+				# Faculty editing another faculty member's activity
+				if self.participant_type == "Faculty" and "Dept.Head" not in roles:
+					frappe.throw(_("You cannot edit other faculty member's activities."))
+				
+				# Faculty/Dept.Head managing activities outside their department
+				if not user_dept or user_dept != self.department:
+					frappe.throw(_("Access denied. You can only manage activities within your own department ({0}).").format(user_dept or "Not Assigned"))
+			else:
+				# Student trying to edit someone else's activity
+				frappe.throw(_("You can only create or edit activities for yourself."))
+		else:
+			# If the user IS the participant, we should still ensure the department matches their profile
+			profile_dept = None
+			if self.participant_type == "Student":
+				profile_dept = frappe.db.get_value("Student", self.participant, "department")
+			elif self.participant_type == "Faculty":
+				profile_dept = frappe.db.get_value("Faculty", self.participant, "department")
+			
+			if profile_dept and profile_dept != self.department:
+				frappe.throw(_("The selected department does not match your profile department ({0}).").format(profile_dept))
