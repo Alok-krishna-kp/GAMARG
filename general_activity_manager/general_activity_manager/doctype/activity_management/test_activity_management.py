@@ -11,23 +11,26 @@ class TestActivityManagement(FrappeTestCase):
 		frappe.db.delete("Student")
 		frappe.db.delete("Faculty")
 
-		# Create test department
-		if not frappe.db.exists("Department", "Test Dept"):
-			frappe.get_doc({
-				"doctype": "Department",
-				"department_name": "Test Dept"
-			}).insert()
+		# Create test departments
+		if not frappe.db.exists("Department", "Dept A"):
+			frappe.get_doc({"doctype": "Department", "department_name": "Dept A"}).insert()
+		if not frappe.db.exists("Department", "Dept B"):
+			frappe.get_doc({"doctype": "Department", "department_name": "Dept B"}).insert()
 		
 		# Create test users and linked profiles
 		self.student_user = "test_student@example.com"
 		self.faculty_user = "test_faculty@example.com"
 		self.dept_head_user = "test_dept_head@example.com"
+		self.dept_b_faculty_user = "other_dept_faculty@example.com"
+		self.dept_b_student_user = "other_dept_student@example.com"
 
 		self.create_test_user(self.student_user, "Student")
 		self.create_test_user(self.faculty_user, "Faculty")
-		self.create_test_user(self.dept_head_user, "Dept.Head")
+		self.create_test_user(self.dept_head_user, "Faculty", "Dept.Head")
+		self.create_test_user(self.dept_b_faculty_user, "Faculty")
+		self.create_test_user(self.dept_b_student_user, "Student")
 
-		# Create Student record linked to user
+		# Create Student record linked to user (Dept A)
 		self.student_name = "STUD-001"
 		if not frappe.db.exists("Student", self.student_name):
 			frappe.get_doc({
@@ -35,11 +38,11 @@ class TestActivityManagement(FrappeTestCase):
 				"uni_reg_no": self.student_name,
 				"fname": "Test",
 				"lname": "Student",
-				"department": "Test Dept",
+				"department": "Dept A",
 				"user": self.student_user
 			}).insert()
 
-		# Create another Student for negative testing
+		# Create another Student for negative testing (Dept A)
 		self.other_student_name = "STUD-002"
 		self.other_student_user = "other_student@example.com"
 		self.create_test_user(self.other_student_user, "Student")
@@ -49,22 +52,34 @@ class TestActivityManagement(FrappeTestCase):
 				"uni_reg_no": self.other_student_name,
 				"fname": "Other",
 				"lname": "Student",
-				"department": "Test Dept",
+				"department": "Dept A",
 				"user": self.other_student_user
 			}).insert()
 
-		# Create Faculty record
+		# Create Student in Dept B for cross-department tests
+		self.dept_b_student_name = "STUD-B"
+		if not frappe.db.exists("Student", self.dept_b_student_name):
+			frappe.get_doc({
+				"doctype": "Student",
+				"uni_reg_no": self.dept_b_student_name,
+				"fname": "Other",
+				"lname": "Student",
+				"department": "Dept B",
+				"user": self.dept_b_student_user
+			}).insert()
+
+		# Create Faculty record (Dept A)
 		self.faculty_name = "FAC-001"
 		if not frappe.db.exists("Faculty", self.faculty_name):
 			frappe.get_doc({
 				"doctype": "Faculty",
 				"id": self.faculty_name,
 				"name1": "Prof. X",
-				"department": "Test Dept",
+				"department": "Dept A",
 				"user": self.faculty_user
 			}).insert()
 
-		# Create another Faculty for negative testing
+		# Create another Faculty for negative testing (Dept A)
 		self.other_faculty_name = "FAC-002"
 		self.other_faculty_user = "other_faculty@example.com"
 		self.create_test_user(self.other_faculty_user, "Faculty")
@@ -73,11 +88,32 @@ class TestActivityManagement(FrappeTestCase):
 				"doctype": "Faculty",
 				"id": self.other_faculty_name,
 				"name1": "Prof. Y",
-				"department": "Test Dept",
+				"department": "Dept A",
 				"user": self.other_faculty_user
 			}).insert()
 
-	def create_test_user(self, email, role):
+		# Create Faculty profile for Dept Head (Dept A)
+		if not frappe.db.exists("Faculty", "FAC-DH"):
+			frappe.get_doc({
+				"doctype": "Faculty",
+				"id": "FAC-DH",
+				"name1": "Head A",
+				"department": "Dept A",
+				"user": self.dept_head_user
+			}).insert()
+
+		# Create Faculty in Dept B for cross-department tests
+		self.dept_b_faculty_name = "FAC-B"
+		if not frappe.db.exists("Faculty", self.dept_b_faculty_name):
+			frappe.get_doc({
+				"doctype": "Faculty",
+				"id": self.dept_b_faculty_name,
+				"name1": "Prof. B",
+				"department": "Dept B",
+				"user": self.dept_b_faculty_user
+			}).insert()
+
+	def create_test_user(self, email, role, role2=None):
 		if not frappe.db.exists("User", email):
 			user = frappe.get_doc({
 				"doctype": "User",
@@ -88,10 +124,14 @@ class TestActivityManagement(FrappeTestCase):
 			})
 			user.insert(ignore_permissions=True)
 			user.add_roles(role)
+			if role2:
+				user.add_roles(role2)
 		else:
 			user = frappe.get_doc("User", email)
 			if role not in [r.role for r in user.roles]:
 				user.add_roles(role)
+			if role2 not in [r.role for r in user.roles]:
+				user.add_roles(role2)
 
 	def test_student_can_create_own_activity(self):
 		frappe.set_user(self.student_user)
@@ -99,7 +139,7 @@ class TestActivityManagement(FrappeTestCase):
 			"doctype": "Activity Management",
 			"participant_type": "Student",
 			"participant": self.student_name,
-			"department": "Test Dept",
+			"department": "Dept A",
 			"event_name": "My Great Event",
 			"category": "Seminar",
 			"event_date": frappe.utils.today()
@@ -113,12 +153,11 @@ class TestActivityManagement(FrappeTestCase):
 			"doctype": "Activity Management",
 			"participant_type": "Student",
 			"participant": self.other_student_name,
-			"department": "Test Dept",
+			"department": "Dept A",
 			"event_name": "Impersonation Attempt",
 			"category": "Seminar",
 			"event_date": frappe.utils.today()
 		})
-		# This should raise ValidationError due to our participant validation logic
 		with self.assertRaises(frappe.ValidationError):
 			doc.insert()
 
@@ -128,7 +167,7 @@ class TestActivityManagement(FrappeTestCase):
 			"doctype": "Activity Management",
 			"participant_type": "Faculty",
 			"participant": self.faculty_name,
-			"department": "Test Dept",
+			"department": "Dept A",
 			"event_name": "My Great Faculty Event",
 			"category": "Seminar",
 			"event_date": frappe.utils.today()
@@ -142,23 +181,22 @@ class TestActivityManagement(FrappeTestCase):
 			"doctype": "Activity Management",
 			"participant_type": "Faculty",
 			"participant": self.other_faculty_name,
-			"department": "Test Dept",
+			"department": "Dept A",
 			"event_name": "My Great Faculty Event",
 			"category": "Seminar",
 			"event_date": frappe.utils.today()
 		})
-		# This should raise ValidationError due to our participant validation logic
 		with self.assertRaises(frappe.ValidationError):
 			doc.insert()
 
-	def test_faculty_approval_workflow(self):
+	def test_faculty_approval_workflow_same_dept(self):
 		# 1. Student creates and submits activity for review
 		frappe.set_user(self.student_user)
 		doc = frappe.get_doc({
 			"doctype": "Activity Management",
 			"participant_type": "Student",
 			"participant": self.student_name,
-			"department": "Test Dept",
+			"department": "Dept A",
 			"event_name": "Workflow Run",
 			"category": "Hackathon",
 			"event_date": frappe.utils.today()
@@ -168,10 +206,29 @@ class TestActivityManagement(FrappeTestCase):
 		apply_workflow(doc, "Submit for Review")
 		self.assertEqual(doc.workflow_state, "Pending Approval")
 
-		# 2. Faculty approves it
+		# 2. Faculty from Dept A approves it
 		frappe.set_user(self.faculty_user)
 		apply_workflow(doc, "Approve")
 		self.assertEqual(doc.workflow_state, "Approved")
+
+	def test_cross_department_access_denied(self):
+		# Activity in Dept A
+		frappe.set_user(self.student_user)
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Student",
+			"participant": self.student_name,
+			"department": "Dept A",
+			"event_name": "Security Test",
+			"category": "Seminar",
+			"event_date": frappe.utils.today()
+		}).insert()
+		apply_workflow(doc, "Submit for Review")
+
+		# Faculty from Dept B tries to approve it
+		frappe.set_user(self.dept_b_faculty_user)
+		with self.assertRaises(frappe.ValidationError):
+			apply_workflow(doc, "Approve")
 
 	def test_dept_head_approval_of_faculty_activity(self):
 		# 1. Faculty creates and submits activity for review
@@ -180,7 +237,7 @@ class TestActivityManagement(FrappeTestCase):
 			"doctype": "Activity Management",
 			"participant_type": "Faculty",
 			"participant": self.faculty_name,
-			"department": "Test Dept",
+			"department": "Dept A",
 			"event_name": "Faculty Research Event",
 			"category": "Workshop",
 			"event_date": frappe.utils.today()
@@ -195,19 +252,112 @@ class TestActivityManagement(FrappeTestCase):
 		apply_workflow(doc, "Approve")
 		self.assertEqual(doc.workflow_state, "Approved")
 
-	def test_dept_head_can_submit_for_all(self):
+	def test_dept_head_can_submit_for_all_in_same_dept(self):
 		frappe.set_user(self.dept_head_user)
 		doc = frappe.get_doc({
 			"doctype": "Activity Management",
 			"participant_type": "Student",
 			"participant": self.other_student_name,
-			"department": "Test Dept",
-			"event_name": "DH Entry",
+			"department": "Dept A",
+			"event_name": "DH Entry 1",
 			"category": "Workshop",
 			"event_date": frappe.utils.today()
 		})
-		doc.insert() # Should pass as per Dept.Head role in python code
+		doc.insert() 
 		self.assertTrue(doc.name)
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Faculty",
+			"participant": self.other_faculty_name,
+			"department": "Dept A",
+			"event_name": "DH Entry 2",
+			"category": "Workshop",
+			"event_date": frappe.utils.today()
+		})
+		doc.insert() 
+		self.assertTrue(doc.name)
+
+	def test_dept_head_cannot_submit_for_other_dept_student(self):
+		frappe.set_user(self.dept_head_user)
+		# B student for dept B
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Student",
+			"participant": self.dept_b_student_name,
+			"department": "Dept B",
+			"event_name": "DH Entry 1",
+			"category": "Workshop",
+			"event_date": frappe.utils.today()
+		})
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
+
+		# B student for dept A
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Student",
+			"participant": self.dept_b_student_name,
+			"department": "Dept A",
+			"event_name": "DH Entry 1",
+			"category": "Workshop",
+			"event_date": frappe.utils.today()
+		})
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
+
+		# A student for dept B
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Student",
+			"participant": self.student_name,
+			"department": "Dept B",
+			"event_name": "DH Entry 1",
+			"category": "Workshop",
+			"event_date": frappe.utils.today()
+		})
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
+
+	def test_dept_head_cannot_submit_for_other_dept_faculty(self):
+		frappe.set_user(self.dept_head_user)
+		# B faculty for dept B
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Faculty",
+			"participant": self.dept_b_faculty_name,
+			"department": "Dept B",
+			"event_name": "DH Entry 2",
+			"category": "Workshop",
+			"event_date": frappe.utils.today()
+		})
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
+
+		# B faculty for dept A
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Faculty",
+			"participant": self.dept_b_faculty_name,
+			"department": "Dept A",
+			"event_name": "DH Entry 2",
+			"category": "Workshop",
+			"event_date": frappe.utils.today()
+		})
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
+		
+		# A faculty for dept B
+		doc = frappe.get_doc({
+			"doctype": "Activity Management",
+			"participant_type": "Faculty",
+			"participant": self.faculty_name,
+			"department": "Dept B",
+			"event_name": "DH Entry 2",
+			"category": "Workshop",
+			"event_date": frappe.utils.today()
+		})
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert()
 
 	def test_date_validation(self):
 		frappe.set_user(self.student_user)
@@ -215,7 +365,7 @@ class TestActivityManagement(FrappeTestCase):
 			"doctype": "Activity Management",
 			"participant_type": "Student",
 			"participant": self.student_name,
-			"department": "Test Dept",
+			"department": "Dept A",
 			"event_name": "Future Event",
 			"category": "Seminar",
 			"event_date": frappe.utils.add_days(frappe.utils.today(), 1)
