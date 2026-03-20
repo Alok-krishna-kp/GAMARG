@@ -4,39 +4,33 @@
  "creation": "2026-02-17 21:27:04.867516",
  "doctype": "DocType",
  "engine": "InnoDB",
-  "field_order": [
+ "field_order": [
+  "participant_type",
   "participant",
   "department",
-  "role",
   "event_name",
   "category",
   "event_date",
   "description",
   "certificate",
-  "status",
   "amended_from",
+  "description",
   "photos"
  ],
  "fields": [
   {
    "fieldname": "participant",
-   "fieldtype": "Link",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
    "label": "Participant",
-   "options": "Student",
+   "options": "participant_type",
    "reqd": 1
   },
   {
    "fieldname": "department",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Department",
-   "options": "CSE\nECE\nEEE\nCEE\nME",
-   "reqd": 1
-  },
-  {
-   "fieldname": "role",
-   "fieldtype": "Select",
-   "label": "Role",
-   "options": "Student\nFaculty\nDepartment Head",
+   "options": "Department",
    "reqd": 1
   },
   {
@@ -70,13 +64,6 @@
    "label": "Certificate"
   },
   {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nPending Verification\nVerified\nRejected",
-   "reqd": 1
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -91,13 +78,26 @@
    "fieldtype": "Table",
    "label": "Photos",
    "options": "Activity Event Photo"
+  },
+  {
+   "fieldname": "participant_type",
+   "fieldtype": "Select",
+   "label": "Participant Type",
+   "options": "Student\nFaculty",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Event Description",
+   "max_height": "200px"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-07 13:28:21.705907",
+ "modified": "2026-03-19 20:52:13.522606",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",

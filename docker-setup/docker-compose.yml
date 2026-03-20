@@ -1,0 +1,75 @@
+services:
+  # Database
+  db:
+    image: mariadb:11.8
+    healthcheck:
+          test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-p$DB_PASSWORD"]
+          interval: 5s
+          timeout: 5s
+          retries: 5
+    restart: always
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+
+  # Cache & Queues
+  redis-cache:
+    image: redis:7-alpine
+    restart: always
+
+  redis-queue:
+    image: redis:7-alpine
+    restart: always
+
+  # Main Application Backend
+  backend:
+    image: ${CUSTOM_IMAGE}
+    depends_on:
+          db:
+            condition: service_healthy
+          redis-cache:
+            condition: service_started
+    restart: always
+    command: /home/frappe/frappe-bench/env/bin/python -m frappe.utils.bench_helper frappe serve --port 8000
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      REDIS_CACHE: redis-cache:6379
+      REDIS_QUEUE: redis-queue:6379
+      REDIS_SOCKETIO: redis-queue:6379
+    working_dir: /home/frappe/frappe-bench/sites
+    volumes:
+      - ./common_site_config.json:/home/frappe/frappe-bench/sites/common_site_config.json
+      - sites:/home/frappe/frappe-bench/sites
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+
+  # Background Job Worker
+  worker:
+    image: ${CUSTOM_IMAGE}
+    restart: always
+    command: /home/frappe/.local/bin/bench worker --queue default
+    depends_on:
+      - backend
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  # Task Scheduler
+  scheduler:
+    image: ${CUSTOM_IMAGE}
+    restart: always
+    command: /home/frappe/.local/bin/bench schedule
+    depends_on:
+      - backend
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+volumes:
+  db-data:
+  sites:

@@ -11,7 +11,10 @@
   "department",
   "roll_no",
   "clg_reg_no",
-  "uni_reg_no"
+  "let",
+  "uni_reg_no",
+  "user",
+  "batch"
  ],
  "fields": [
   {
@@ -30,10 +33,10 @@
   },
   {
    "fieldname": "department",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Department",
-   "options": "CSE\nECE\nEEE\nCEE\nME",
+   "options": "Department",
    "reqd": 1
   },
   {
@@ -51,12 +54,30 @@
    "fieldtype": "Data",
    "label": "University Register No.",
    "unique": 1
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "let",
+   "fieldtype": "Check",
+   "label": "Lateral Entry"
+  },
+  {
+   "fieldname": "batch",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Batch"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-07 13:04:46.242007",
+ "modified": "2026-03-19 23:14:36.892744",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Student",
@@ -102,7 +123,9 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "fname"
 }

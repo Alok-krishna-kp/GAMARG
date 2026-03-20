@@ -12,7 +12,8 @@ fixtures = [
     "Web Form",
     "Workflow",
     "Workflow State",
-    "Workflow Action",
+    "Workflow Action Master",
+    "Web Page",
 ]
 
 # on_login = "general_activity_manager.utils.redirect_gamarg_user"
