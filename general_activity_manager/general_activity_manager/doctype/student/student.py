@@ -41,3 +41,16 @@ class Student(Document):
 			year_code = int(match.group(1))
 			self.batch = 2004 + year_code
 
+	@frappe.whitelist()
+	def get_prefix_info(self):
+		uni_code = frappe.db.get_single_value("Institute Information", "code")
+		faculty_batch = frappe.db.get_value("Faculty", {"user": frappe.session.user}, "batch")
+
+		year_code = ""
+		if faculty_batch:
+			year_code = str(faculty_batch - 2004).zfill(2)
+
+		return {
+			"uni_code": uni_code,
+			"year_code": year_code
+		}
