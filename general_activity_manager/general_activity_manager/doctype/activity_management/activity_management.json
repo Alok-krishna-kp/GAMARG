@@ -13,6 +13,7 @@
   "event_date",
   "certificate",
   "amended_from",
+  "description",
   "photos"
  ],
  "fields": [
@@ -78,13 +79,19 @@
    "label": "Participant Type",
    "options": "Student\nFaculty",
    "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Event Description",
+   "max_height": "200px"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-18 17:05:18.668047",
+ "modified": "2026-03-19 20:52:13.522606",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",
