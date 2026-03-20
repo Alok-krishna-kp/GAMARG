@@ -1,20 +1,29 @@
 import frappe
 
+def get_roles(user):
+    roles = frappe.get_roles(user)
+    return {
+        "Student": "Student" in roles,
+        "Faculty": "Faculty" in roles,
+        "DH": "Department Head" in roles,
+        "SM": "System Manager" in roles
+    }
+
 def get_student_query_conditions(user=None):
     if not user:
         user = frappe.session.user
 
-    roles = frappe.get_roles(user)
+    roles = get_roles(user)
 
-    if "System Manager" in roles:
+    if roles["SM"]:
         return ""
 
     conditions = []
 
-    if "Student" in roles:
+    if roles["Student"]:
         conditions.append(f"`tabStudent`.user = {frappe.db.escape(user)}")
 
-    if "Faculty" in roles or "Department Head" in roles:
+    if roles["Faculty"] or roles["DH"]:
         # Get faculty's department
         faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
         if faculty_dept:
@@ -33,36 +42,34 @@ def has_student_permission(doc, ptype=None, user=None):
     if not user:
         user = frappe.session.user
 
-    roles = frappe.get_roles(user)
+    roles = get_roles(user)
 
-    if "System Manager" in roles:
+    if roles["SM"]:
         return True
 
-    allowed = False
-
-    if "Student" in roles:
+    if roles["Student"]:
         if doc.user == user:
-            allowed = True
+            return True
 
-    if not allowed and ("Faculty" in roles or "Department Head" in roles):
+    if roles["Faculty"] or roles["DH"]:
         faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
         if faculty_dept and doc.department == faculty_dept:
             allowed = True
 
-    return allowed
+    return False
 
 def get_faculty_query_conditions(user=None):
     if not user:
         user = frappe.session.user
 
-    roles = frappe.get_roles(user)
+    roles = get_roles(user)
 
-    if "System Manager" in roles:
+    if roles["SM"]:
         return ""
 
     conditions = []
 
-    if "Faculty" in roles or "Department Head" in roles:
+    if roles["Faculty"] or roles["DH"]:
         # Faculty sees themselves and others in their department
         faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
         if faculty_dept:
@@ -71,7 +78,7 @@ def get_faculty_query_conditions(user=None):
             # If no department, at least see yourself
             conditions.append(f"`tabFaculty`.user = {frappe.db.escape(user)}")
 
-    if "Student" in roles:
+    if roles["Student"]:
         # Students shouldn't see Faculty records as per "nothing else" logic
         # but let's allow them to see the record associated with them if any (unlikely)
         # or just restrict.
@@ -86,14 +93,14 @@ def has_faculty_permission(doc, ptype=None, user=None):
     if not user:
         user = frappe.session.user
 
-    roles = frappe.get_roles(user)
+    roles = get_roles(user)
 
-    if "System Manager" in roles:
+    if roles["SM"]:
         return True
 
     allowed = False
 
-    if "Faculty" in roles or "Department Head" in roles:
+    if roles["Faculty"] or roles["DH"]:
         faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
         if faculty_dept and doc.department == faculty_dept:
             allowed = True
