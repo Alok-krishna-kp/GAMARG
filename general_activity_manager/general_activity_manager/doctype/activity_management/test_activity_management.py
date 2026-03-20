@@ -18,9 +18,9 @@ class TestActivityManagement(FrappeTestCase):
 			frappe.get_doc({"doctype": "Department", "department_name": "Dept B"}).insert()
 		
 		# Set institute information
-		inst_info = frappe.get_single("Institute Information")
-		inst_info.code = "WYD"
-		inst_info.save()
+		frappe.db.set_single_value("Institute Information", "code", "WYD")
+		frappe.db.set_single_value("Institute Information", "fname", "Test Institute")
+		frappe.db.set_single_value("Institute Information", "sname", "TI")
 		
 		# Create test users and linked profiles
 		self.student_user = "test_student@example.com"
