@@ -17,6 +17,11 @@ class TestActivityManagement(FrappeTestCase):
 		if not frappe.db.exists("Department", "Dept B"):
 			frappe.get_doc({"doctype": "Department", "department_name": "Dept B"}).insert()
 		
+		# Set institute information
+		inst_info = frappe.get_single("Institute Information")
+		inst_info.code = "WYD"
+		inst_info.save()
+		
 		# Create test users and linked profiles
 		self.student_user = "test_student@example.com"
 		self.faculty_user = "test_faculty@example.com"
@@ -31,7 +36,7 @@ class TestActivityManagement(FrappeTestCase):
 		self.create_test_user(self.dept_b_student_user, "Student")
 
 		# Create Student record linked to user (Dept A)
-		self.student_name = "STUD-001"
+		self.student_name = "WYD22EC001"
 		if not frappe.db.exists("Student", self.student_name):
 			frappe.get_doc({
 				"doctype": "Student",
@@ -43,7 +48,7 @@ class TestActivityManagement(FrappeTestCase):
 			}).insert()
 
 		# Create another Student for negative testing (Dept A)
-		self.other_student_name = "STUD-002"
+		self.other_student_name = "WYD22EC002"
 		self.other_student_user = "other_student@example.com"
 		self.create_test_user(self.other_student_user, "Student")
 		if not frappe.db.exists("Student", self.other_student_name):
@@ -57,7 +62,7 @@ class TestActivityManagement(FrappeTestCase):
 			}).insert()
 
 		# Create Student in Dept B for cross-department tests
-		self.dept_b_student_name = "STUD-B"
+		self.dept_b_student_name = "WYD22ME001"
 		if not frappe.db.exists("Student", self.dept_b_student_name):
 			frappe.get_doc({
 				"doctype": "Student",
