@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": null,
- "modified": "2026-02-19 02:28:27.586043",
+ "modified": "2026-03-20 16:10:09.457166",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Student Activity Statement",
@@ -27,10 +27,10 @@
    "role": "Faculty"
   },
   {
-   "role": "Department Head"
+   "role": "System Manager"
   },
   {
-   "role": "System Manager"
+   "role": "Dept.Head"
   }
  ],
  "timeout": 0

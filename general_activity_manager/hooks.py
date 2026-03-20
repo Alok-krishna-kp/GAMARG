@@ -16,7 +16,25 @@ fixtures = [
     "Web Page",
 ]
 
+<<<<<<< HEAD
 # on_login = "general_activity_manager.utils.redirect_gamarg_user"
+=======
+# Permissions
+# -----------
+permission_query_conditions = {
+    "Activity Management": "general_activity_manager.permissions.activity_management.get_permission_query_conditions",
+    "Faculty":             "general_activity_manager.permissions.faculty.get_permission_query_conditions",
+    "Student":             "general_activity_manager.permissions.student.get_permission_query_conditions",
+}
+
+has_permission = {
+    "Activity Management": "general_activity_manager.permissions.activity_management.has_permission",
+    "Faculty":             "general_activity_manager.permissions.faculty.has_permission",
+    "Student":             "general_activity_manager.permissions.student.has_permission",
+}
+
+#on_login = "general_activity_manager.utils.redirect_gamarg_user"
+>>>>>>> e933ef4 (feat:Add advanced filtering.fix:modify workspace(WIP))
 
 # website_redirects = [
 #     {"source": "/", "target": "/"},
@@ -43,7 +61,7 @@ fixtures = [
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/general_activity_manager/css/general_activity_manager.css"
-# app_include_js = "/assets/general_activity_manager/js/general_activity_manager.js"
+app_include_js = "/assets/general_activity_manager/js/general_activity_manager.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/general_activity_manager/css/general_activity_manager.css"
@@ -110,50 +128,26 @@ fixtures = [
 
 # Integration Setup
 # ------------------
-# To set up dependencies/integrations with other apps
-# Name of the app being installed is passed as an argument
-
 # before_app_install = "general_activity_manager.utils.before_app_install"
 # after_app_install = "general_activity_manager.utils.after_app_install"
 
 # Integration Cleanup
 # -------------------
-# To clean up dependencies/integrations with other apps
-# Name of the app being uninstalled is passed as an argument
-
 # before_app_uninstall = "general_activity_manager.utils.before_app_uninstall"
 # after_app_uninstall = "general_activity_manager.utils.after_app_uninstall"
 
 # Desk Notifications
 # ------------------
-# See frappe.core.notifications.get_notification_config
-
 # notification_config = "general_activity_manager.notifications.get_notification_config"
-
-# Permissions
-# -----------
-# Permissions evaluated in scripted ways
-
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
-#
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
 
 # DocType Class
 # ---------------
-# Override standard doctype classes
-
 # override_doctype_class = {
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
 
 # Document Events
 # ---------------
-# Hook on document methods and events
-
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
@@ -164,7 +158,6 @@ fixtures = [
 
 # Scheduled Tasks
 # ---------------
-
 # scheduler_events = {
 # 	"all": [
 # 		"general_activity_manager.tasks.all"
@@ -185,29 +178,19 @@ fixtures = [
 
 # Testing
 # -------
-
 # before_tests = "general_activity_manager.install.before_tests"
 
 # Overriding Methods
 # ------------------------------
-#
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "general_activity_manager.event.get_events"
 # }
-#
-# each overriding function accepts a `data` argument;
-# generated from the base implementation of the doctype dashboard,
-# along with any modifications made in other Frappe apps
+
 # override_doctype_dashboards = {
 # 	"Task": "general_activity_manager.task.get_dashboard_data"
 # }
 
-# exempt linked doctypes from being automatically cancelled
-#
 # auto_cancel_exempted_doctypes = ["Auto Repeat"]
-
-# Ignore links to specified DocTypes when deleting documents
-# -----------------------------------------------------------
 
 # ignore_links_on_delete = ["Communication", "ToDo"]
 
@@ -223,44 +206,16 @@ fixtures = [
 
 # User Data Protection
 # --------------------
-
-# user_data_fields = [
-# 	{
-# 		"doctype": "{doctype_1}",
-# 		"filter_by": "{filter_by}",
-# 		"redact_fields": ["{field_1}", "{field_2}"],
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_2}",
-# 		"filter_by": "{filter_by}",
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_3}",
-# 		"strict": False,
-# 	},
-# 	{
-# 		"doctype": "{doctype_4}"
-# 	}
-# ]
+# user_data_fields = [...]
 
 # Authentication and authorization
 # --------------------------------
-
 # auth_hooks = [
 # 	"general_activity_manager.auth.validate"
 # ]
 
-# Automatically update python controller files with type annotations for this app.
 # export_python_type_annotations = True
 
 # default_log_clearing_doctypes = {
-# 	"Logging DocType Name": 30  # days to retain logs
+# 	"Logging DocType Name": 30
 # }
-
-# Translation
-# ------------
-# List of apps whose translatable strings should be excluded from this app's translations.
-# ignore_translatable_strings_from = []
-

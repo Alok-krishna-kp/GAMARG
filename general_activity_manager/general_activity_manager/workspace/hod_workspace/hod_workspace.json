@@ -1,7 +1,7 @@
 {
  "app": "general_activity_manager",
  "charts": [],
- "content": "[{\"id\":\"n1DL0zm-nd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">HOD_Workspace</span>\",\"col\":12}},{\"id\":\"k5_q_MIABt\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Activities\",\"col\":10}},{\"id\":\"ynN_pNN03f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Manage</b></span>\",\"col\":12}},{\"id\":\"oo2u0au4dI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activities\",\"col\":3}},{\"id\":\"JEmHLjbZqQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculties\",\"col\":3}},{\"id\":\"DcBWjBU-pT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Students\",\"col\":3}}]",
+ "content": "[{\"id\":\"n1DL0zm-nd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">HOD_Workspace</span>\",\"col\":12}},{\"id\":\"k5_q_MIABt\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Activities\",\"col\":10}},{\"id\":\"ynN_pNN03f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Manage</b></span>\",\"col\":12}},{\"id\":\"oo2u0au4dI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activities\",\"col\":3}},{\"id\":\"JEmHLjbZqQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculties\",\"col\":3}},{\"id\":\"DcBWjBU-pT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Students\",\"col\":3}},{\"id\":\"rpt_shortcut1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Activity Statement\",\"col\":3}}]",
  "creation": "2026-03-14 11:19:38.364038",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,8 +13,50 @@
  "indicator_color": "",
  "is_hidden": 0,
  "label": "HOD_Workspace",
- "links": [],
- "modified": "2026-03-13 22:45:09.104735",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Activity Management",
+   "link_count": 0,
+   "link_to": "Activity Management",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Faculty",
+   "link_count": 0,
+   "link_to": "Faculty",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Student",
+   "link_count": 0,
+   "link_to": "Student",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Student Activity Statement",
+   "link_count": 0,
+   "link_to": "Student Activity Statement",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Activity Management",
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-03-20 16:17:35.786175",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "HOD_Workspace",
@@ -32,6 +74,9 @@
  "roles": [
   {
    "role": "Dept.Head"
+  },
+  {
+   "role": "Faculty"
   }
  ],
  "sequence_id": 28.0,
@@ -59,6 +104,13 @@
    "link_to": "Student",
    "stats_filter": "[]",
    "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "label": "Student Activity Statement",
+   "link_to": "Student Activity Statement",
+   "report_ref_doctype": "Activity Management",
+   "type": "Report"
   }
  ],
  "title": "HOD_Workspace",

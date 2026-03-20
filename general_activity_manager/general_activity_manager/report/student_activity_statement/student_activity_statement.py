@@ -1,6 +1,8 @@
 import frappe
+from general_activity_manager.permissions.report_filters import apply_role_filters
 
 def execute(filters=None):
+    filters = apply_role_filters(filters)
     columns = get_columns()
     data = get_data(filters)
     return columns, data
