@@ -134,13 +134,15 @@ fixtures = [
 # -----------
 # Permissions evaluated in scripted ways
 
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
-#
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
+permission_query_conditions = {
+	"Student": "general_activity_manager.general_activity_manager.permissions.get_student_query_conditions",
+    "Faculty": "general_activity_manager.general_activity_manager.permissions.get_faculty_query_conditions",
+}
+
+has_permission = {
+	"Student": "general_activity_manager.general_activity_manager.permissions.has_student_permission",
+    "Faculty": "general_activity_manager.general_activity_manager.permissions.has_faculty_permission",
+}
 
 # DocType Class
 # ---------------
