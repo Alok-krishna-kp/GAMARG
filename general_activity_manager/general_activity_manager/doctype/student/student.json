@@ -11,8 +11,10 @@
   "department",
   "roll_no",
   "clg_reg_no",
+  "let",
   "uni_reg_no",
-  "user"
+  "user",
+  "batch"
  ],
  "fields": [
   {
@@ -58,12 +60,24 @@
    "fieldtype": "Link",
    "label": "User",
    "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "let",
+   "fieldtype": "Check",
+   "label": "Lateral Entry"
+  },
+  {
+   "fieldname": "batch",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Batch"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-18 17:02:03.495723",
+ "modified": "2026-03-19 23:14:36.892744",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Student",
