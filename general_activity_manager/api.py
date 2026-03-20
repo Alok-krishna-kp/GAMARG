@@ -150,5 +150,6 @@ def get_activity_report(activity_name):
         "department":       doc.department,
         "category":         getattr(doc, "category", None),
         "status":           getattr(doc, "workflow_state", None) or "—",
+        "description":      getattr(doc, "description", None),
         "certificate":      getattr(doc, "certificate", None),
     }

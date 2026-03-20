@@ -461,12 +461,38 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 	function renderReport(data) {
 		if (!data) return;
 
+		const isImage = data.certificate && (data.certificate.endsWith(".jpg") || data.certificate.endsWith(".jpeg") || data.certificate.endsWith(".png") || data.certificate.endsWith(".webp"));
+
 		wrapper.querySelector("#ar-report-content").innerHTML = `
-      <div>
+      <div id="ar-print-area">
+        <style>
+          @media print {
+            body * { visibility: hidden; }
+            #ar-print-area, #ar-print-area * { visibility: visible; }
+            #ar-print-area { position: absolute; left: 0; top: 0; width: 100%; border: none !important; box-shadow: none !important; }
+            .ar-no-print { display: none !important; }
+            .ar-report-section { border: 1px solid #eee !important; break-inside: avoid; }
+            .ar-report-section-header { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; }
+          }
+        </style>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;" class="ar-no-print">
+          <div style="font-size:0.75rem; color:#9ca3af;">Preview Mode</div>
+          <button id="ar-btn-print" style="padding: 6px 12px; background: #1a1a2e; color: #fff; border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print Report (PDF)
+          </button>
+        </div>
+
+        <div style="text-align:center; margin-bottom:24px; display:none" class="ar-print-only">
+           <h2 style="margin:0; color:#1a1a2e;">Activity Report</h2>
+           <p style="margin:4px 0 0; font-size:0.9rem; color:#6b7280;">Generated on ${new Date().toLocaleDateString()}</p>
+        </div>
+
         <div class="ar-report-section">
           <div class="ar-report-section-header">Activity Details</div>
           <div class="ar-report-row"><span class="key">Activity ID</span><span class="val">${frappe.utils.escape_html(data.name)}</span></div>
-          <div class="ar-report-row"><span class="key">Event Name</span><span class="val">${frappe.utils.escape_html(data.event_name || "—")}</span></div>
+          <div class="ar-report-row"><span class="key">Event Name</span><span class="val" style="font-weight:700;">${frappe.utils.escape_html(data.event_name || "—")}</span></div>
           <div class="ar-report-row"><span class="key">Event Date</span><span class="val">${data.event_date || "—"}</span></div>
           <div class="ar-report-row"><span class="key">Category</span><span class="val">${frappe.utils.escape_html(data.category || "—")}</span></div>
           <div class="ar-report-row">
@@ -474,6 +500,12 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
             <span class="val"><span class="ar-badge ${badgeClass(data.status)}">${frappe.utils.escape_html(data.status || "—")}</span></span>
           </div>
         </div>
+
+        ${data.description ? `
+        <div class="ar-report-section">
+          <div class="ar-report-section-header">Description</div>
+          <div style="padding: 12px 14px; font-size: 0.85rem; color: #4b5563; line-height: 1.5; white-space: pre-wrap;">${frappe.utils.escape_html(data.description)}</div>
+        </div>` : ""}
 
         <div class="ar-report-section">
           <div class="ar-report-section-header">Participant Info</div>
@@ -484,7 +516,6 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
             <span class="val"><span class="ar-badge ${roleBadge(data.participant_type)}">${frappe.utils.escape_html(data.participant_type || "—")}</span></span>
           </div>
           <div class="ar-report-row"><span class="key">Department</span><span class="val">${frappe.utils.escape_html(data.department || "—")}</span></div>
-          ${data.hod_name ? `<div class="ar-report-row"><span class="key">HOD</span><span class="val">${frappe.utils.escape_html(data.hod_name)}</span></div>` : ""}
         </div>
 
         ${data.certificate ? `
@@ -492,12 +523,20 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
           <div class="ar-report-section-header">Certificate</div>
           <div class="ar-report-row">
             <span class="val">
-              <a href="${frappe.utils.escape_html(data.certificate)}" target="_blank" style="color:#1a1a2e;font-weight:600;text-decoration:none;">
-                📎 View Certificate →
+              <a href="${frappe.utils.escape_html(data.certificate)}" target="_blank" style="color:#1a1a2e;font-weight:600;text-decoration:none; display:flex; align-items:center; gap:8px;">
+                📎 View Original Certificate →
               </a>
             </span>
           </div>
+          ${isImage ? `
+          <div style="padding: 0 14px 14px;">
+            <img src="${frappe.utils.escape_html(data.certificate)}" style="max-width:100%; border-radius:6px; border:1px solid #eee;" />
+          </div>` : ""}
         </div>` : ""}
       </div>`;
+
+		wrapper.querySelector("#ar-btn-print").addEventListener("click", () => {
+			window.print();
+		});
 	}
 };
