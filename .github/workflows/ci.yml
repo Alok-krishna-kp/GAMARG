@@ -1,109 +1,93 @@
-
 name: CI
 
 on:
   push:
-    branches:
-      - develop
+    branches: [develop]
   pull_request:
-    branches:
-      - develop
+    branches: [develop]
   workflow_dispatch:
 
 concurrency:
-  group: develop-general_activity_manager-${{ github.event.number }}
+  group: develop-general_activity_manager-${{ github.event.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    name: Server
+    name: Server Tests
 
     services:
       redis-cache:
         image: redis:alpine
-        ports:
-          - 13000:6379
+        ports: ["13000:6379"]
       redis-queue:
         image: redis:alpine
-        ports:
-          - 11000:6379
+        ports: ["11000:6379"]
       mariadb:
         image: mariadb:10.6
         env:
           MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
+        ports: ["3306:3306"]
         options: --health-cmd="mariadb-admin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
-      - name: Clone
-        uses: actions/checkout@v3
-
-      - name: Find tests
-        run: |
-          echo "Finding tests"
-          grep -rn "def test" > /dev/null
+      - name: Clone Repository
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.14'
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 24
           check-latest: true
 
-      - name: Cache pip
+      - name: Cache Everything
+        id: cache-all
         uses: actions/cache@v4
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt', '**/pyproject.toml', '**/setup.py', '**/setup.cfg') }}
+          path: |
+            ~/.cache/pip
+            ~/.cache/yarn
+            /home/runner/frappe-bench
+          # Static key for the bench structure, dynamic for requirements
+          key: ${{ runner.os }}-frappe-v2-${{ hashFiles('**/requirements.txt', '**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
+            ${{ runner.os }}-frappe-v2-
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: 'echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT'
-
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install MariaDB Client
-        run: sudo apt-get install mariadb-client
-
-      - name: Setup
+      - name: Setup Bench Environment
         run: |
+          # 1. Install bench CLI (Uses pip cache)
           pip install frappe-bench
-          bench init --skip-redis-config-generation --skip-assets --python "$(which python)" ~/frappe-bench
-          mariadb --host 127.0.0.1 --port 3306 -u root -proot -e "SET GLOBAL character_set_server = 'utf8mb4'"
-          mariadb --host 127.0.0.1 --port 3306 -u root -proot -e "SET GLOBAL collation_server = 'utf8mb4_unicode_ci'"
+          
+          # 2. Check if the bench folder was restored
+          if [ ! -d "/home/runner/frappe-bench/env" ]; then
+            bench init --skip-redis-config-generation --skip-assets --python "$(which python)" /home/runner/frappe-bench
+          fi
+          
+          # 3. Configure MariaDB (Pre-installed client)
+          mysql --host 127.0.0.1 --port 3306 -u root -proot -e "SET GLOBAL character_set_server = 'utf8mb4'; SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
 
-      - name: Install
+      - name: Install App
         working-directory: /home/runner/frappe-bench
         run: |
-          bench get-app general_activity_manager $GITHUB_WORKSPACE
+          # Only fetch if the app isn't already in the cached folder
+          if [ ! -d "apps/general_activity_manager" ]; then
+            bench get-app --skip-assets general_activity_manager $GITHUB_WORKSPACE
+          fi
+          # This will be instant if requirements haven't changed
           bench setup requirements --dev
-          bench new-site --db-root-password root --admin-password admin test_site
-          bench --site test_site install-app general_activity_manager
-          bench build
-        env:
-          CI: 'Yes'
 
-      - name: Run Tests
+      - name: Setup Site & Run Tests
         working-directory: /home/runner/frappe-bench
         run: |
+          # DB creation: Still the 'fixed cost' of ~2 mins
+          bench new-site --db-root-password root --admin-password admin --install-app general_activity_manager test_site
           bench --site test_site set-config allow_tests true
           bench --site test_site run-tests --app general_activity_manager
         env:
+          CI: 'Yes'
           TYPE: server
