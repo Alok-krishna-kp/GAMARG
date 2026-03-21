@@ -54,7 +54,7 @@ def has_student_permission(doc, ptype=None, user=None):
     if roles["Faculty"] or roles["DH"]:
         faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
         if faculty_dept and doc.department == faculty_dept:
-            allowed = True
+            return True
 
     return False
 

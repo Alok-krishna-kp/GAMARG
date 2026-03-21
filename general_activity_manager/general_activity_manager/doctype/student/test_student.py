@@ -6,6 +6,7 @@ from frappe.tests.utils import FrappeTestCase
 
 class TestStudent(FrappeTestCase):
 	def setUp(self):
+		frappe.set_user("Administrator")
 		frappe.db.delete("Student")
 		# Set institute information
 		frappe.db.set_single_value("Institute Information", "code", "WYD")

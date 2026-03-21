@@ -163,7 +163,7 @@ class TestActivityManagement(FrappeTestCase):
 			"category": "Seminar",
 			"event_date": frappe.utils.today()
 		})
-		with self.assertRaises(frappe.ValidationError):
+		with self.assertRaises(frappe.PermissionError):
 			doc.insert()
 
 	def test_faculty_can_create_own_activity(self):
@@ -232,7 +232,7 @@ class TestActivityManagement(FrappeTestCase):
 
 		# Faculty from Dept B tries to approve it
 		frappe.set_user(self.dept_b_faculty_user)
-		with self.assertRaises(frappe.ValidationError):
+		with self.assertRaises(frappe.PermissionError):
 			apply_workflow(doc, "Approve")
 
 	def test_dept_head_approval_of_faculty_activity(self):
@@ -294,7 +294,7 @@ class TestActivityManagement(FrappeTestCase):
 			"category": "Workshop",
 			"event_date": frappe.utils.today()
 		})
-		with self.assertRaises(frappe.ValidationError):
+		with self.assertRaises(frappe.PermissionError):
 			doc.insert()
 
 		# B student for dept A
@@ -320,7 +320,7 @@ class TestActivityManagement(FrappeTestCase):
 			"category": "Workshop",
 			"event_date": frappe.utils.today()
 		})
-		with self.assertRaises(frappe.ValidationError):
+		with self.assertRaises(frappe.PermissionError):
 			doc.insert()
 
 	def test_dept_head_cannot_submit_for_other_dept_faculty(self):
@@ -335,7 +335,7 @@ class TestActivityManagement(FrappeTestCase):
 			"category": "Workshop",
 			"event_date": frappe.utils.today()
 		})
-		with self.assertRaises(frappe.ValidationError):
+		with self.assertRaises(frappe.PermissionError):
 			doc.insert()
 
 		# B faculty for dept A
@@ -361,7 +361,7 @@ class TestActivityManagement(FrappeTestCase):
 			"category": "Workshop",
 			"event_date": frappe.utils.today()
 		})
-		with self.assertRaises(frappe.ValidationError):
+		with self.assertRaises(frappe.PermissionError):
 			doc.insert()
 
 	def test_date_validation(self):
