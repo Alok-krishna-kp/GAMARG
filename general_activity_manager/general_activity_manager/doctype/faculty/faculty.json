@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:id",
  "creation": "2026-03-07 13:08:54.936918",
@@ -53,7 +54,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-19 23:21:53.410662",
+ "modified": "2026-03-21 00:31:57.971501",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Faculty",

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "creation": "2026-02-17 21:27:04.867516",
  "doctype": "DocType",
@@ -91,7 +92,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-19 20:52:13.522606",
+ "modified": "2026-03-21 00:31:32.371722",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Activity Management",

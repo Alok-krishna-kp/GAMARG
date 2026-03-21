@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:department_name",
  "creation": "2026-02-17 21:58:18.766144",
@@ -19,7 +20,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-03 20:45:31.666201",
+ "modified": "2026-03-21 00:32:29.716758",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Department",

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:uni_reg_no",
  "creation": "2026-03-07 12:52:44.381275",
@@ -77,7 +78,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-19 23:14:36.892744",
+ "modified": "2026-03-21 00:32:16.328920",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Student",
