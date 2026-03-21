@@ -137,11 +137,13 @@ fixtures = [
 permission_query_conditions = {
 	"Student": "general_activity_manager.general_activity_manager.permissions.get_student_query_conditions",
     "Faculty": "general_activity_manager.general_activity_manager.permissions.get_faculty_query_conditions",
+    "Activity Management": "general_activity_manager.general_activity_manager.permissions.get_activity_query_conditions",
 }
 
 has_permission = {
 	"Student": "general_activity_manager.general_activity_manager.permissions.has_student_permission",
     "Faculty": "general_activity_manager.general_activity_manager.permissions.has_faculty_permission",
+    "Activity Management": "general_activity_manager.general_activity_manager.permissions.has_activity_permission",
 }
 
 # DocType Class

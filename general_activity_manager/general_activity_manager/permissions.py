@@ -5,7 +5,7 @@ def get_roles(user):
     return {
         "Student": "Student" in roles,
         "Faculty": "Faculty" in roles,
-        "DH": "Department Head" in roles,
+        "DH": "Dept.Head" in roles,
         "SM": "System Manager" in roles
     }
 
@@ -108,5 +108,64 @@ def has_faculty_permission(doc, ptype=None, user=None):
             allowed = True
 
     # Student shouldn't see Faculty
-    
     return allowed
+    
+def get_activity_query_conditions(user=None):
+    if not user:
+        user = frappe.session.user
+
+    roles = get_roles(user)
+    if roles["SM"]:
+        return ""
+
+    conditions = []
+    if roles["Student"]:
+        # Match activities where the participant links to this user
+        # We can join with Student table or just pass a subquery
+        conditions.append(f"""(
+            `tabActivity Management`.participant_type = 'Student' 
+            AND `tabActivity Management`.participant IN (
+                SELECT name FROM `tabStudent` WHERE user = {frappe.db.escape(user)}
+            )
+        )""")
+
+    if roles["Faculty"] or roles["DH"]:
+        # Find faculty's department
+        faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
+        if faculty_dept:
+            conditions.append(f"`tabActivity Management`.department = {frappe.db.escape(faculty_dept)}")
+        else:
+            # At least see their own if they are a participant (Faculty type)
+            conditions.append(f"""(
+                `tabActivity Management`.participant_type = 'Faculty' 
+                AND `tabActivity Management`.participant IN (
+                    SELECT name FROM `tabFaculty` WHERE user = {frappe.db.escape(user)}
+                )
+            )""")
+
+    if not conditions:
+        return "1=0"
+
+    return " OR ".join(conditions)
+
+def has_activity_permission(doc, ptype=None, user=None):
+    if not user:
+        user = frappe.session.user
+
+    roles = get_roles(user)
+    if roles["SM"]:
+        return True
+
+    # Participant Check
+    participant_user = frappe.db.get_value(doc.get("participant_type"), doc.get("participant"), "user")
+    if participant_user == user:
+        return True
+
+    # Department Check for Staff
+    if roles["Faculty"] or roles["DH"]:
+        doc_dept = doc.get("department")
+        faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
+        if faculty_dept and doc_dept == faculty_dept:
+            return True
+
+    return False
