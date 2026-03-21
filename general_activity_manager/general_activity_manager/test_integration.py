@@ -9,7 +9,11 @@ class TestPermissionIntegration(FrappeTestCase):
 		frappe.db.delete("Activity Management")
 		frappe.db.delete("Student")
 		frappe.db.delete("Faculty")
-		
+
+		frappe.db.set_single_value("Institute Information", "code", "WYD")
+		frappe.db.set_single_value("Institute Information", "fname", "Test Institute")
+		frappe.db.set_single_value("Institute Information", "sname", "TI")
+
 		# Ensure Departments exist
 		if not frappe.db.exists("Department", "Dept A"):
 			frappe.get_doc({"doctype": "Department", "department_name": "Dept A"}).insert()
