@@ -1,10 +1,11 @@
 # Copyright (c) 2026, gamarg and contributors
 # For license information, please see license.txt
 
-import frappe
-from frappe.model.document import Document
-from frappe import _
 import re
+
+import frappe
+from frappe import _
+from frappe.model.document import Document
 
 
 class Student(Document):
@@ -22,16 +23,15 @@ class Student(Document):
 
 		# If let is set, prefix with L
 		prefix = "L" + uni_code if self.let else uni_code
-		
+
 		# Format: prefix + 2 digits + 2 letters + 3 digits
 		pattern = rf"^{re.escape(prefix)}\d{{2}}[A-Z]{{2}}\d{{3}}$"
-		
+
 		if not re.match(pattern, self.uni_reg_no):
 			frappe.throw(
-				_("University Register Number {0} is invalid. It should be in the format [L]{1}YYDDXXX (e.g., {1}22EC051).").format(
-					frappe.bold(self.uni_reg_no),
-					frappe.bold(prefix)
-				)
+				_(
+					"University Register Number {0} is invalid. It should be in the format [L]{1}YYDDXXX (e.g., {1}22EC051)."
+				).format(frappe.bold(self.uni_reg_no), frappe.bold(prefix))
 			)
 
 		# Automatically fill batch
@@ -50,7 +50,4 @@ class Student(Document):
 		if faculty_batch:
 			year_code = str(faculty_batch - 2004).zfill(2)
 
-		return {
-			"uni_code": uni_code,
-			"year_code": year_code
-		}
+		return {"uni_code": uni_code, "year_code": year_code}

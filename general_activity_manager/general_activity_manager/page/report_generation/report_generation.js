@@ -246,17 +246,17 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 		if (!status) return "ar-badge-gray";
 		const s = status.toLowerCase();
 		if (["completed", "approved", "active"].includes(s)) return "ar-badge-green";
-		if (["pending", "in progress"].includes(s))          return "ar-badge-yellow";
-		if (["cancelled", "rejected"].includes(s))           return "ar-badge-red";
-		if (["submitted"].includes(s))                       return "ar-badge-blue";
+		if (["pending", "in progress"].includes(s)) return "ar-badge-yellow";
+		if (["cancelled", "rejected"].includes(s)) return "ar-badge-red";
+		if (["submitted"].includes(s)) return "ar-badge-blue";
 		return "ar-badge-gray";
 	}
 
 	function roleBadge(role) {
 		if (!role) return "ar-badge-gray";
 		const r = role.toLowerCase();
-		if (r === "student")         return "ar-badge-blue";
-		if (r === "faculty")         return "ar-badge-purple";
+		if (r === "student") return "ar-badge-blue";
+		if (r === "faculty") return "ar-badge-purple";
 		if (r === "department head") return "ar-badge-green";
 		return "ar-badge-gray";
 	}
@@ -297,20 +297,33 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 			tab.classList.add("active");
 			currentTab = tab.dataset.tab;
 
-			wrapper.querySelector("#ar-form-student").style.display    = currentTab === "student"     ? "" : "none";
-			wrapper.querySelector("#ar-form-staff").style.display      = currentTab === "staff"       ? "" : "none";
-			wrapper.querySelector("#ar-form-department").style.display = currentTab === "department"  ? "" : "none";
+			wrapper.querySelector("#ar-form-student").style.display =
+				currentTab === "student" ? "" : "none";
+			wrapper.querySelector("#ar-form-staff").style.display =
+				currentTab === "staff" ? "" : "none";
+			wrapper.querySelector("#ar-form-department").style.display =
+				currentTab === "department" ? "" : "none";
 
 			const titles = {
-				student:    ["Search Student Activity",    "Enter university register number and start date"],
-				staff:      ["Search Staff Activity",      "Enter faculty register number and start date"],
-				department: ["Search Department Activity", "Select a department to view all its activities"],
+				student: [
+					"Search Student Activity",
+					"Enter university register number and start date",
+				],
+				staff: ["Search Staff Activity", "Enter faculty register number and start date"],
+				department: [
+					"Search Department Activity",
+					"Select a department to view all its activities",
+				],
 			};
-			wrapper.querySelector("#ar-search-title").textContent    = titles[currentTab][0];
+			wrapper.querySelector("#ar-search-title").textContent = titles[currentTab][0];
 			wrapper.querySelector("#ar-search-subtitle").textContent = titles[currentTab][1];
 
-			wrapper.querySelector("#ar-results-content").innerHTML = emptyState("Enter your details above to search for activities");
-			wrapper.querySelector("#ar-report-content").innerHTML   = emptyState("Search and select an activity to generate the report");
+			wrapper.querySelector("#ar-results-content").innerHTML = emptyState(
+				"Enter your details above to search for activities"
+			);
+			wrapper.querySelector("#ar-report-content").innerHTML = emptyState(
+				"Search and select an activity to generate the report"
+			);
 		});
 	});
 
@@ -328,24 +341,31 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 				const studentId = wrapper.querySelector("#ar-student-id").value.trim();
 				const startDate = wrapper.querySelector("#ar-student-start").value;
 				if (!studentId || !startDate) {
-					frappe.msgprint({ message: __("Please enter Student ID and Start Date."), indicator: "orange" });
+					frappe.msgprint({
+						message: __("Please enter Student ID and Start Date."),
+						indicator: "orange",
+					});
 					return;
 				}
 				result = await frappe.call({
 					method: "general_activity_manager.api.get_student_activities",
 					args: { student_id: studentId, start_date: startDate },
 				});
-				
+
 				if (result.message && result.message.student) {
 					showStudentInfo(result.message.student);
 				}
-				activities = result.message ? (result.message.activities || result.message) : [];
-
+				activities = result.message ? result.message.activities || result.message : [];
 			} else if (currentTab === "staff") {
-				const staffId   = wrapper.querySelector("#ar-staff-id").value.trim();
+				const staffId = wrapper.querySelector("#ar-staff-id").value.trim();
 				const startDate = wrapper.querySelector("#ar-staff-start").value;
 				if (!staffId || !startDate) {
-					frappe.msgprint({ message: __("Please enter Faculty University Register No. and Start Date."), indicator: "orange" });
+					frappe.msgprint({
+						message: __(
+							"Please enter Faculty University Register No. and Start Date."
+						),
+						indicator: "orange",
+					});
 					return;
 				}
 				result = await frappe.call({
@@ -353,12 +373,14 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 					args: { staff_id: staffId, start_date: startDate },
 				});
 				wrapper.querySelector("#ar-results-content").innerHTML = "";
-				activities = result.message ? (result.message.activities || result.message) : [];
-
+				activities = result.message ? result.message.activities || result.message : [];
 			} else if (currentTab === "department") {
 				const department = wrapper.querySelector("#ar-department").value;
 				if (!department) {
-					frappe.msgprint({ message: __("Please select a Department."), indicator: "orange" });
+					frappe.msgprint({
+						message: __("Please select a Department."),
+						indicator: "orange",
+					});
 					return;
 				}
 				result = await frappe.call({
@@ -366,15 +388,17 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 					args: { department },
 				});
 				wrapper.querySelector("#ar-results-content").innerHTML = "";
-				activities = result.message ? (result.message.activities || result.message) : [];
+				activities = result.message ? result.message.activities || result.message : [];
 			}
 
 			if (!Array.isArray(activities)) activities = [];
 			renderResults(activities);
-
 		} catch (err) {
 			console.error(err);
-			frappe.msgprint({ message: __("An error occurred while searching."), indicator: "red" });
+			frappe.msgprint({
+				message: __("An error occurred while searching."),
+				indicator: "red",
+			});
 		} finally {
 			btn.disabled = false;
 			btn.innerHTML = `
@@ -389,7 +413,9 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 		const container = wrapper.querySelector("#ar-results-content");
 		container.innerHTML = `
       <div style="background:#f0f4ff;border:1px solid #c7d7fc;border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:0.85rem;">
-        <div style="font-weight:600;color:#1a1a2e;margin-bottom:4px;">👤 ${frappe.utils.escape_html(student.full_name)}</div>
+        <div style="font-weight:600;color:#1a1a2e;margin-bottom:4px;">👤 ${frappe.utils.escape_html(
+			student.full_name
+		)}</div>
         <div style="color:#6b7280;display:flex;gap:16px;flex-wrap:wrap;">
           <span>🆔 ${frappe.utils.escape_html(student.university_reg_no)}</span>
           <span>🏢 ${frappe.utils.escape_html(student.department || "—")}</span>
@@ -405,32 +431,56 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 
 		if (!activities.length) {
 			if (listContainer) {
-				listContainer.innerHTML = emptyState("No activities found for the given criteria.");
+				listContainer.innerHTML = emptyState(
+					"No activities found for the given criteria."
+				);
 			} else {
 				container.innerHTML = emptyState("No activities found for the given criteria.");
 			}
 			return;
 		}
 
-		const listHtml = activities.map((a) => `
+		const listHtml = activities
+			.map(
+				(a) => `
       <div class="ar-activity-item" data-name="${frappe.utils.escape_html(a.name)}">
-        <div class="ar-activity-item-name">${frappe.utils.escape_html(a.event_name || a.name)}</div>
+        <div class="ar-activity-item-name">${frappe.utils.escape_html(
+			a.event_name || a.name
+		)}</div>
         <div class="ar-activity-item-meta">
           <span>📅 ${a.event_date || "—"}</span>
-          ${a.category   ? `<span>🏷 ${frappe.utils.escape_html(a.category)}</span>`   : ""}
+          ${a.category ? `<span>🏷 ${frappe.utils.escape_html(a.category)}</span>` : ""}
           ${a.department ? `<span>🏢 ${frappe.utils.escape_html(a.department)}</span>` : ""}
-          ${a.role       ? `<span class="ar-badge ${roleBadge(a.participant_type)}">${frappe.utils.escape_html(a.participant_type)}</span>` : ""}
-          ${a.status     ? `<span class="ar-badge ${badgeClass(a.status)}">${frappe.utils.escape_html(a.status)}</span>` : ""}
+          ${
+				a.role
+					? `<span class="ar-badge ${roleBadge(
+							a.participant_type
+					  )}">${frappe.utils.escape_html(a.participant_type)}</span>`
+					: ""
+			}
+          ${
+				a.status
+					? `<span class="ar-badge ${badgeClass(a.status)}">${frappe.utils.escape_html(
+							a.status
+					  )}</span>`
+					: ""
+			}
         </div>
-      </div>`).join("");
+      </div>`
+			)
+			.join("");
 
 		container.innerHTML = `
-      <div class="ar-results-count">Found <strong>${activities.length}</strong> activit${activities.length === 1 ? "y" : "ies"}</div>
+      <div class="ar-results-count">Found <strong>${activities.length}</strong> activit${
+			activities.length === 1 ? "y" : "ies"
+		}</div>
       <div class="ar-activity-list">${listHtml}</div>`;
 
 		container.querySelectorAll(".ar-activity-item").forEach((item) => {
 			item.addEventListener("click", () => {
-				container.querySelectorAll(".ar-activity-item").forEach((i) => i.classList.remove("selected"));
+				container
+					.querySelectorAll(".ar-activity-item")
+					.forEach((i) => i.classList.remove("selected"));
 				item.classList.add("selected");
 				loadReport(item.dataset.name);
 			});
@@ -461,7 +511,12 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 	function renderReport(data) {
 		if (!data) return;
 
-		const isImage = data.certificate && (data.certificate.endsWith(".jpg") || data.certificate.endsWith(".jpeg") || data.certificate.endsWith(".png") || data.certificate.endsWith(".webp"));
+		const isImage =
+			data.certificate &&
+			(data.certificate.endsWith(".jpg") ||
+				data.certificate.endsWith(".jpeg") ||
+				data.certificate.endsWith(".png") ||
+				data.certificate.endsWith(".webp"));
 
 		wrapper.querySelector("#ar-report-content").innerHTML = `
       <div id="ar-print-area">
@@ -491,48 +546,94 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 
         <div class="ar-report-section">
           <div class="ar-report-section-header">Activity Details</div>
-          <div class="ar-report-row"><span class="key">Activity ID</span><span class="val">${frappe.utils.escape_html(data.name)}</span></div>
-          <div class="ar-report-row"><span class="key">Event Name</span><span class="val" style="font-weight:700;">${frappe.utils.escape_html(data.event_name || "—")}</span></div>
-          <div class="ar-report-row"><span class="key">Event Date</span><span class="val">${data.event_date || "—"}</span></div>
-          <div class="ar-report-row"><span class="key">Category</span><span class="val">${frappe.utils.escape_html(data.category || "—")}</span></div>
+          <div class="ar-report-row"><span class="key">Activity ID</span><span class="val">${frappe.utils.escape_html(
+				data.name
+			)}</span></div>
+          <div class="ar-report-row"><span class="key">Event Name</span><span class="val" style="font-weight:700;">${frappe.utils.escape_html(
+				data.event_name || "—"
+			)}</span></div>
+          <div class="ar-report-row"><span class="key">Event Date</span><span class="val">${
+				data.event_date || "—"
+			}</span></div>
+          <div class="ar-report-row"><span class="key">Category</span><span class="val">${frappe.utils.escape_html(
+				data.category || "—"
+			)}</span></div>
           <div class="ar-report-row">
             <span class="key">Status</span>
-            <span class="val"><span class="ar-badge ${badgeClass(data.status)}">${frappe.utils.escape_html(data.status || "—")}</span></span>
+            <span class="val"><span class="ar-badge ${badgeClass(
+				data.status
+			)}">${frappe.utils.escape_html(data.status || "—")}</span></span>
           </div>
         </div>
 
-        ${data.description ? `
+        ${
+			data.description
+				? `
         <div class="ar-report-section">
           <div class="ar-report-section-header">Description</div>
-          <div style="padding: 12px 14px; font-size: 0.85rem; color: #4b5563; line-height: 1.5; white-space: pre-wrap;">${frappe.utils.escape_html(data.description)}</div>
-        </div>` : ""}
+          <div style="padding: 12px 14px; font-size: 0.85rem; color: #4b5563; line-height: 1.5; white-space: pre-wrap;">${frappe.utils.escape_html(
+				data.description
+			)}</div>
+        </div>`
+				: ""
+		}
 
         <div class="ar-report-section">
           <div class="ar-report-section-header">Participant Info</div>
-          ${data.full_name ? `<div class="ar-report-row"><span class="key">Full Name</span><span class="val">${frappe.utils.escape_html(data.full_name)}</span></div>` : ""}
-          ${data.university_reg_no ? `<div class="ar-report-row"><span class="key">University Reg. No</span><span class="val">${frappe.utils.escape_html(data.university_reg_no)}</span></div>` : `<div class="ar-report-row"><span class="key">Participant</span><span class="val">${frappe.utils.escape_html(data.participant || "—")}</span></div>`}
+          ${
+				data.full_name
+					? `<div class="ar-report-row"><span class="key">Full Name</span><span class="val">${frappe.utils.escape_html(
+							data.full_name
+					  )}</span></div>`
+					: ""
+			}
+          ${
+				data.university_reg_no
+					? `<div class="ar-report-row"><span class="key">University Reg. No</span><span class="val">${frappe.utils.escape_html(
+							data.university_reg_no
+					  )}</span></div>`
+					: `<div class="ar-report-row"><span class="key">Participant</span><span class="val">${frappe.utils.escape_html(
+							data.participant || "—"
+					  )}</span></div>`
+			}
           <div class="ar-report-row">
             <span class="key">Role</span>
-            <span class="val"><span class="ar-badge ${roleBadge(data.participant_type)}">${frappe.utils.escape_html(data.participant_type || "—")}</span></span>
+            <span class="val"><span class="ar-badge ${roleBadge(
+				data.participant_type
+			)}">${frappe.utils.escape_html(data.participant_type || "—")}</span></span>
           </div>
-          <div class="ar-report-row"><span class="key">Department</span><span class="val">${frappe.utils.escape_html(data.department || "—")}</span></div>
+          <div class="ar-report-row"><span class="key">Department</span><span class="val">${frappe.utils.escape_html(
+				data.department || "—"
+			)}</span></div>
         </div>
 
-        ${data.certificate ? `
+        ${
+			data.certificate
+				? `
         <div class="ar-report-section">
           <div class="ar-report-section-header">Certificate</div>
           <div class="ar-report-row">
             <span class="val">
-              <a href="${frappe.utils.escape_html(data.certificate)}" target="_blank" style="color:#1a1a2e;font-weight:600;text-decoration:none; display:flex; align-items:center; gap:8px;">
+              <a href="${frappe.utils.escape_html(
+					data.certificate
+				)}" target="_blank" style="color:#1a1a2e;font-weight:600;text-decoration:none; display:flex; align-items:center; gap:8px;">
                 📎 View Original Certificate →
               </a>
             </span>
           </div>
-          ${isImage ? `
+          ${
+				isImage
+					? `
           <div style="padding: 0 14px 14px;">
-            <img src="${frappe.utils.escape_html(data.certificate)}" style="max-width:100%; border-radius:6px; border:1px solid #eee;" />
-          </div>` : ""}
-        </div>` : ""}
+            <img src="${frappe.utils.escape_html(
+				data.certificate
+			)}" style="max-width:100%; border-radius:6px; border:1px solid #eee;" />
+          </div>`
+					: ""
+			}
+        </div>`
+				: ""
+		}
       </div>`;
 
 		wrapper.querySelector("#ar-btn-print").addEventListener("click", () => {

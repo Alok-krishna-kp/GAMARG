@@ -6,14 +6,14 @@ app_email = "alokkrishnakp524741@gmail.com"
 app_license = "mit"
 
 fixtures = [
-    "Role",
-    "Custom DocPerm",
-    "Custom Role",
-    "Web Form",
-    "Workflow",
-    "Workflow State",
-    "Workflow Action Master",
-    "Web Page",
+	"Role",
+	"Custom DocPerm",
+	"Custom Role",
+	"Web Form",
+	"Workflow",
+	"Workflow State",
+	"Workflow Action Master",
+	"Web Page",
 ]
 
 # on_login = "general_activity_manager.utils.redirect_gamarg_user"
@@ -136,14 +136,14 @@ fixtures = [
 
 permission_query_conditions = {
 	"Student": "general_activity_manager.general_activity_manager.permissions.get_student_query_conditions",
-    "Faculty": "general_activity_manager.general_activity_manager.permissions.get_faculty_query_conditions",
-    "Activity Management": "general_activity_manager.general_activity_manager.permissions.get_activity_query_conditions",
+	"Faculty": "general_activity_manager.general_activity_manager.permissions.get_faculty_query_conditions",
+	"Activity Management": "general_activity_manager.general_activity_manager.permissions.get_activity_query_conditions",
 }
 
 has_permission = {
 	"Student": "general_activity_manager.general_activity_manager.permissions.has_student_permission",
-    "Faculty": "general_activity_manager.general_activity_manager.permissions.has_faculty_permission",
-    "Activity Management": "general_activity_manager.general_activity_manager.permissions.has_activity_permission",
+	"Faculty": "general_activity_manager.general_activity_manager.permissions.has_faculty_permission",
+	"Activity Management": "general_activity_manager.general_activity_manager.permissions.has_activity_permission",
 }
 
 # DocType Class
@@ -267,4 +267,3 @@ has_permission = {
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-
