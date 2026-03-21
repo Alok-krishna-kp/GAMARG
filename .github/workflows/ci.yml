@@ -74,10 +74,12 @@ jobs:
       - name: Install App
         working-directory: /home/runner/frappe-bench
         run: |
-          # Only fetch if the app isn't already in the cached folder
-          if [ ! -d "apps/general_activity_manager" ]; then
-            bench get-app --skip-assets general_activity_manager $GITHUB_WORKSPACE
+          # 1. Kill the cached version of your app
+          if [ -d "apps/general_activity_manager" ]; then
+            rm -rf apps/general_activity_manager
           fi
+          # 2. Link to the FRESH code cloned by GitHub Actions
+          bench get-app --skip-assets general_activity_manager $GITHUB_WORKSPACE
           # This will be instant if requirements haven't changed
           bench setup requirements --dev
 
@@ -85,7 +87,7 @@ jobs:
         working-directory: /home/runner/frappe-bench
         run: |
           # DB creation: Still the 'fixed cost' of ~2 mins
-          bench new-site --db-root-password root --admin-password admin --install-app general_activity_manager test_site
+          bench new-site --db-root-password root --admin-password admin --install-app general_activity_manager test_site --force
           bench --site test_site set-config allow_tests true
           bench --site test_site run-tests --app general_activity_manager
         env:
