@@ -1,7 +1,7 @@
 {
  "app": "general_activity_manager",
  "charts": [],
- "content": "[{\"id\":\"n1DL0zm-nd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Home Desk</span>\",\"col\":12}},{\"id\":\"k5_q_MIABt\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Activities\",\"col\":10}},{\"id\":\"1MXQ51M4hP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ynN_pNN03f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Manage</b></span>\",\"col\":12}},{\"id\":\"oo2u0au4dI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activities\",\"col\":3}},{\"id\":\"JEmHLjbZqQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculties\",\"col\":3}},{\"id\":\"DcBWjBU-pT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Students\",\"col\":3}},{\"id\":\"u_4yz84wtf\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"erD-fcsUXy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"R3ELC1KSuP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>System</b></span>\",\"col\":12}},{\"id\":\"d4lbmKDlYA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Institution Info\",\"col\":3}},{\"id\":\"pcSsGWkA3J\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Departments\",\"col\":3}},{\"id\":\"KLC5fLacfh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Users\",\"col\":3}},{\"id\":\"w7gzYs39YV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Role\",\"col\":3}},{\"id\":\"seudbSgWbI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Import Data\",\"col\":3}},{\"id\":\"4XurAp1i5x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Export Data\",\"col\":3}}]",
+ "content": "[{\"id\":\"n1DL0zm-nd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Home Desk</span>\",\"col\":12}},{\"id\":\"k5_q_MIABt\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Activities\",\"col\":10}},{\"id\":\"1MXQ51M4hP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ynN_pNN03f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Manage</b></span>\",\"col\":12}},{\"id\":\"oo2u0au4dI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activities\",\"col\":3}},{\"id\":\"JEmHLjbZqQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculties\",\"col\":3}},{\"id\":\"DcBWjBU-pT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Students\",\"col\":3}},{\"id\":\"u_4yz84wtf\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"erD-fcsUXy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"R3ELC1KSuP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>System</b></span>\",\"col\":12}},{\"id\":\"seudbSgWbI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Import Data\",\"col\":3}},{\"id\":\"4XurAp1i5x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Export Data\",\"col\":3}},{\"id\":\"KLC5fLacfh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Users\",\"col\":3}},{\"id\":\"w7gzYs39YV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Role\",\"col\":3}},{\"id\":\"d4lbmKDlYA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Institution Info\",\"col\":3}},{\"id\":\"pcSsGWkA3J\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Departments\",\"col\":3}}]",
  "creation": "2026-03-14 11:19:38.364038",
  "custom_blocks": [],
  "docstatus": 0,
@@ -14,7 +14,7 @@
  "is_hidden": 0,
  "label": "Home-Desk",
  "links": [],
- "modified": "2026-03-22 23:27:11.755238",
+ "modified": "2026-03-22 23:45:33.010512",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Home-Desk",
