@@ -47,7 +47,7 @@ def has_student_permission(doc, ptype=None, user=None):
 
 	roles = get_roles(user)
 
-	if roles["SM"]:
+	if roles["SM"] or not doc.department:
 		return True
 
 	if roles["Student"]:
@@ -100,20 +100,17 @@ def has_faculty_permission(doc, ptype=None, user=None):
 
 	roles = get_roles(user)
 
-	if roles["SM"]:
+	if roles["SM"] or not doc.department:
 		return True
-
-	allowed = False
 
 	if roles["Faculty"] or roles["DH"]:
 		faculty_dept = frappe.db.get_value("Faculty", {"user": user}, "department")
 		if faculty_dept and doc.department == faculty_dept:
-			allowed = True
+			return True
 		elif doc.user == user:
-			allowed = True
+			return True
 
-	# Student shouldn't see Faculty
-	return allowed
+	return False
 
 
 def get_activity_query_conditions(user=None):
