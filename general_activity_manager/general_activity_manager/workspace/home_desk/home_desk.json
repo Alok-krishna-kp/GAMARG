@@ -1,0 +1,112 @@
+{
+ "app": "general_activity_manager",
+ "charts": [],
+ "content": "[{\"id\":\"n1DL0zm-nd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Home Desk</span>\",\"col\":12}},{\"id\":\"k5_q_MIABt\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Activities\",\"col\":10}},{\"id\":\"1MXQ51M4hP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ynN_pNN03f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Manage</b></span>\",\"col\":12}},{\"id\":\"oo2u0au4dI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activities\",\"col\":3}},{\"id\":\"JEmHLjbZqQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculties\",\"col\":3}},{\"id\":\"DcBWjBU-pT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Students\",\"col\":3}},{\"id\":\"u_4yz84wtf\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"erD-fcsUXy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"R3ELC1KSuP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>System</b></span>\",\"col\":12}},{\"id\":\"d4lbmKDlYA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Institution Info\",\"col\":3}},{\"id\":\"pcSsGWkA3J\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Departments\",\"col\":3}},{\"id\":\"KLC5fLacfh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Users\",\"col\":3}},{\"id\":\"w7gzYs39YV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Role\",\"col\":3}},{\"id\":\"seudbSgWbI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Import Data\",\"col\":3}},{\"id\":\"4XurAp1i5x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Export Data\",\"col\":3}}]",
+ "creation": "2026-03-14 11:19:38.364038",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "arrow-down-right",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Home-Desk",
+ "links": [],
+ "modified": "2026-03-22 23:27:11.755238",
+ "modified_by": "Administrator",
+ "module": "General Activity Manager",
+ "name": "Home-Desk",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [
+  {
+   "document_type": "Activity Management",
+   "label": "Activities",
+   "quick_list_filter": "[]"
+  }
+ ],
+ "roles": [
+  {
+   "role": "Dept.Head"
+  }
+ ],
+ "sequence_id": 28.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Activities",
+   "link_to": "Activity Management",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Institution Info",
+   "link_to": "Institute Information",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "Import Data",
+   "link_to": "Data Import",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Role",
+   "link_to": "Role",
+   "stats_filter": "[[\"Role\",\"disabled\",\"=\",0]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Faculties",
+   "link_to": "Faculty",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Departments",
+   "link_to": "Department",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Students",
+   "link_to": "Student",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Users",
+   "link_to": "User",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Export Data",
+   "link_to": "Data Export",
+   "type": "DocType"
+  }
+ ],
+ "title": "Home-Desk",
+ "type": "Workspace"
+}
