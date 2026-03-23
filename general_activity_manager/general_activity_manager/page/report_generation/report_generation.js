@@ -128,12 +128,6 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
       .ar-report-row .key { width: 140px; flex-shrink: 0; color: #64748b; font-size: 0.85rem; font-weight: 500; }
       .ar-report-row .val { font-weight: 500; color: #0f172a; flex: 1; }
 
-      .ar-results-count {
-        font-size: 0.85rem; color: #475569; margin-bottom: 16px;
-        padding: 8px 12px; background: #f8fafc; border-radius: 8px;
-        border: 1px solid #e2e8f0;
-      }
-
       .ar-spinner {
         display: inline-block; width: 16px; height: 16px;
         border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
@@ -249,6 +243,7 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 
 	// ── State ────────────────────────────────────────────────────────────────────
 	let currentTab = "student";
+	let currentActivitiesList = []; // NEW: Store current activities for batch printing
 
 	// ── Helpers ──────────────────────────────────────────────────────────────────
 	function badgeClass(status) {
@@ -401,6 +396,9 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 			}
 
 			if (!Array.isArray(activities)) activities = [];
+
+			// Store activities for batch printing
+			currentActivitiesList = activities;
 			renderResults(activities);
 		} catch (err) {
 			console.error(err);
@@ -479,10 +477,17 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 			)
 			.join("");
 
+		// Added "Print All" button next to results count
 		container.innerHTML = `
-      <div class="ar-results-count">Found <strong>${activities.length}</strong> activit${
-			activities.length === 1 ? "y" : "ies"
-		}</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 0.85rem; color: #475569;">Found <strong>${
+				activities.length
+			}</strong> activit${activities.length === 1 ? "y" : "ies"}</div>
+          <button id="ar-btn-print-all" style="padding: 6px 12px; background: #0f172a; color: #ffffff; border: none; border-radius: 6px; font-size: 0.85rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print All Results
+          </button>
+      </div>
       <div class="ar-activity-list">${listHtml}</div>`;
 
 		container.querySelectorAll(".ar-activity-item").forEach((item) => {
@@ -494,9 +499,66 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 				loadReport(item.dataset.name);
 			});
 		});
+
+		// Attach event listener for Print All
+		container.querySelector("#ar-btn-print-all").addEventListener("click", printAllReports);
 	}
 
-	// ── Load report ──────────────────────────────────────────────────────────────
+	// ── Fetch multiple reports for Print All ─────────────────────────────────────
+	async function printAllReports() {
+		if (!currentActivitiesList || currentActivitiesList.length === 0) return;
+
+		const rc = wrapper.querySelector("#ar-report-content");
+		const printAllBtn = wrapper.querySelector("#ar-btn-print-all");
+
+		// Set button loading state
+		printAllBtn.disabled = true;
+		printAllBtn.innerHTML = `<span class="ar-spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:#fff;width:14px;height:14px;"></span> Fetching...`;
+
+		rc.innerHTML = `
+      <div class="ar-empty">
+        <span class="ar-spinner" style="border-color:rgba(37,99,235,0.2);border-top-color:#2563eb;width:32px;height:32px;"></span>
+        <p id="ar-print-all-progress">Fetching reports (0/${currentActivitiesList.length})…</p>
+      </div>`;
+
+		try {
+			let allHtmlParts = [];
+
+			// Fetch each report sequentially to avoid overwhelming the backend
+			for (let i = 0; i < currentActivitiesList.length; i++) {
+				wrapper.querySelector("#ar-print-all-progress").textContent = `Fetching report ${
+					i + 1
+				} of ${currentActivitiesList.length}…`;
+
+				const activityName = currentActivitiesList[i].name;
+				const result = await frappe.call({
+					method: "general_activity_manager.api.get_activity_report",
+					args: { activity_name: activityName },
+				});
+
+				if (result.message) {
+					// Wrap each report in a div that tells the printer to create a new page
+					allHtmlParts.push(`
+						<div class="ar-page-break">
+							${getReportBodyHTML(result.message)}
+						</div>
+					`);
+				}
+			}
+
+			// Render the combined payload into the report panel
+			renderCombinedReports(allHtmlParts.join(""), currentActivitiesList.length);
+		} catch (err) {
+			console.error(err);
+			rc.innerHTML = `<div class="ar-empty"><p style="color:#ef4444;">Failed to generate bulk reports. Please try again.</p></div>`;
+		} finally {
+			// Restore button state
+			printAllBtn.disabled = false;
+			printAllBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print All Results`;
+		}
+	}
+
+	// ── Load single report ───────────────────────────────────────────────────────
 	async function loadReport(activityName) {
 		const rc = wrapper.querySelector("#ar-report-content");
 		rc.innerHTML = `
@@ -516,52 +578,13 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 		}
 	}
 
-	// ── Render report panel ──────────────────────────────────────────────────────
-	// ── Render report panel ──────────────────────────────────────────────────────
+	// ── Render single report panel ───────────────────────────────────────────────
 	function renderReport(data) {
 		if (!data) return;
 
-		const isImage =
-			data.certificate &&
-			(data.certificate.endsWith(".jpg") ||
-				data.certificate.endsWith(".jpeg") ||
-				data.certificate.endsWith(".png") ||
-				data.certificate.endsWith(".webp"));
-
 		wrapper.querySelector("#ar-report-content").innerHTML = `
       <div id="ar-print-area">
-        <style>
-          /* Screen preview styles for the print area */
-          #ar-print-area {
-             color: #0f172a;
-          }
-
-          /* The magic happens here: specifically targeting the PDF/Print engine */
-          @media print {
-            @page { margin: 20mm; } /* Gives the PDF proper document margins */
-
-            body * { visibility: hidden; }
-            #ar-print-area, #ar-print-area * {
-                visibility: visible;
-                -webkit-print-color-adjust: exact !important; /* Forces Chrome/Safari to print background colors */
-                print-color-adjust: exact !important; /* Forces Firefox to print background colors */
-            }
-            #ar-print-area {
-                position: absolute; left: 0; top: 0; width: 100%;
-                border: none !important; box-shadow: none !important;
-                font-family: 'Inter', sans-serif; /* Clean font for paper */
-            }
-            .ar-no-print { display: none !important; }
-
-            /* Print-specific layout tweaks */
-            .ar-print-header { display: block !important; border-bottom: 2px solid #2563eb; padding-bottom: 16px; margin-bottom: 32px; }
-            .ar-report-section { border: 1px solid #cbd5e1 !important; margin-bottom: 24px !important; page-break-inside: avoid; border-radius: 8px; }
-            .ar-report-section-header { background-color: #f1f5f9 !important; color: #334155 !important; font-weight: bold !important; padding: 12px 16px !important; border-bottom: 1px solid #cbd5e1 !important; }
-            .ar-report-row { border-bottom: 1px solid #e2e8f0 !important; }
-            img { max-width: 100% !important; page-break-inside: avoid; }
-          }
-        </style>
-
+        ${getReportPrintStyles()}
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;" class="ar-no-print">
           <div style="font-size:0.85rem; font-weight:600; color:#64748b; background: #f1f5f9; padding: 4px 12px; border-radius: 999px;">📄 Document Preview</div>
           <button id="ar-btn-print" style="padding: 10px 18px; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(37,99,235,0.2); transition: all 0.2s;">
@@ -569,7 +592,127 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
             Download PDF
           </button>
         </div>
+        ${getReportBodyHTML(data)}
+      </div>`;
 
+		bindPrintButton();
+	}
+
+	// ── Render combined reports panel ────────────────────────────────────────────
+	function renderCombinedReports(htmlContent, count) {
+		wrapper.querySelector("#ar-report-content").innerHTML = `
+      <div id="ar-print-area">
+        ${getReportPrintStyles()}
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; background: #eff6ff; padding: 16px; border-radius: 12px; border: 1px solid #bfdbfe;" class="ar-no-print">
+          <div>
+              <div style="font-size:0.9rem; font-weight:700; color:#1e3a8a; margin-bottom:4px;">📄 Batch Preview Ready</div>
+              <div style="font-size:0.8rem; color:#3b82f6;">Scroll down to preview all ${count} reports.</div>
+          </div>
+          <button id="ar-btn-print" style="padding: 10px 18px; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(37,99,235,0.2); transition: all 0.2s;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print All ${count} PDFs
+          </button>
+        </div>
+        ${htmlContent}
+      </div>`;
+
+		bindPrintButton();
+	}
+
+	// ── Reusable Component: Print CSS Styles ─────────────────────────────────────
+	function getReportPrintStyles() {
+		return `
+        <style>
+          #ar-print-area { color: #0f172a; }
+
+          @media print {
+            @page { margin: 20mm; }
+
+            /* 1. AGGRESSIVELY HIDE ALL FRAPPE SHELL UI & SEARCH PANELS */
+            .navbar,
+            .app-sidebar,
+            .standard-sidebar,
+            .sidebar-left,
+            .layout-side-section,
+            .page-head,
+            header,
+            .ar-no-print,
+            .ar-header,
+            .ar-tabs,
+            #ar-search-card,
+            #ar-results-card {
+                display: none !important;
+            }
+
+            /* 2. FORCE FRAPPE MAIN CONTAINERS TO FULL WIDTH (NO PADDING/MARGINS) */
+            body, html,
+            .main-section,
+            .page-body,
+            .page-content-wrapper,
+            .layout-main-section,
+            .page-wrapper,
+            .page-container,
+            .content,
+            .container,
+            .ar-root,
+            .ar-grid,
+            .ar-card,
+            #ar-report-card {
+                display: block !important;
+                position: static !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                overflow: visible !important;
+                height: auto !important;
+                background: transparent !important;
+                transform: none !important;
+            }
+
+            /* 3. STYLES FOR THE PRINTED CONTENT */
+            #ar-print-area {
+                visibility: visible;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                font-family: 'Inter', sans-serif;
+                width: 100% !important;
+            }
+
+            .ar-print-header { display: block !important; border-bottom: 2px solid #2563eb; padding-bottom: 16px; margin-bottom: 32px; }
+            .ar-report-section { border: 1px solid #cbd5e1 !important; margin-bottom: 24px !important; page-break-inside: avoid; break-inside: avoid; border-radius: 8px; }
+            .ar-report-section-header { background-color: #f1f5f9 !important; color: #334155 !important; font-weight: bold !important; padding: 12px 16px !important; border-bottom: 1px solid #cbd5e1 !important; }
+            .ar-report-row { border-bottom: 1px solid #e2e8f0 !important; }
+            img { max-width: 100% !important; page-break-inside: avoid; break-inside: avoid; }
+
+            /* 4. THE MAGIC PAGE BREAK FIX */
+            .ar-page-break {
+                page-break-after: always !important;
+                break-after: page !important;
+                display: block !important;
+                clear: both !important;
+            }
+            .ar-page-break:last-child {
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+          }
+        </style>
+		`;
+	}
+
+	// ── Reusable Component: HTML Generator for a Single Report ───────────────────
+	function getReportBodyHTML(data) {
+		const isImage =
+			data.certificate &&
+			(data.certificate.endsWith(".jpg") ||
+				data.certificate.endsWith(".jpeg") ||
+				data.certificate.endsWith(".png") ||
+				data.certificate.endsWith(".webp"));
+
+		return `
         <div class="ar-print-header" style="display:none;">
            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                <div>
@@ -663,18 +806,18 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
         </div>`
 				: ""
 		}
-      </div>`;
+		`;
+	}
 
-		// Hover effect for the new button
+	function bindPrintButton() {
 		const printBtn = wrapper.querySelector("#ar-btn-print");
-		printBtn.addEventListener(
-			"mouseover",
-			() => (printBtn.style.transform = "translateY(-1px)")
-		);
-		printBtn.addEventListener("mouseout", () => (printBtn.style.transform = "none"));
-
-		printBtn.addEventListener("click", () => {
-			window.print();
-		});
+		if (printBtn) {
+			printBtn.addEventListener(
+				"mouseover",
+				() => (printBtn.style.transform = "translateY(-1px)")
+			);
+			printBtn.addEventListener("mouseout", () => (printBtn.style.transform = "none"));
+			printBtn.addEventListener("click", () => window.print());
+		}
 	}
 };
