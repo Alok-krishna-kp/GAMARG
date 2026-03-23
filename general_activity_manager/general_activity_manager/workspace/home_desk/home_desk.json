@@ -14,7 +14,7 @@
  "is_hidden": 0,
  "label": "Home-Desk",
  "links": [],
- "modified": "2026-03-22 23:45:33.010512",
+ "modified": "2026-03-23 14:37:25.485034",
  "modified_by": "Administrator",
  "module": "General Activity Manager",
  "name": "Home-Desk",
@@ -32,6 +32,9 @@
  "roles": [
   {
    "role": "Dept.Head"
+  },
+  {
+   "role": "Faculty"
   }
  ],
  "sequence_id": 28.0,
