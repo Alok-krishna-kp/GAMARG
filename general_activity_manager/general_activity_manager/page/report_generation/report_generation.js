@@ -545,40 +545,6 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
         </div>
 
         <div class="ar-report-section">
-          <div class="ar-report-section-header">Activity Details</div>
-          <div class="ar-report-row"><span class="key">Activity ID</span><span class="val">${frappe.utils.escape_html(
-				data.name
-			)}</span></div>
-          <div class="ar-report-row"><span class="key">Event Name</span><span class="val" style="font-weight:700;">${frappe.utils.escape_html(
-				data.event_name || "—"
-			)}</span></div>
-          <div class="ar-report-row"><span class="key">Event Date</span><span class="val">${
-				data.event_date || "—"
-			}</span></div>
-          <div class="ar-report-row"><span class="key">Category</span><span class="val">${frappe.utils.escape_html(
-				data.category || "—"
-			)}</span></div>
-          <div class="ar-report-row">
-            <span class="key">Status</span>
-            <span class="val"><span class="ar-badge ${badgeClass(
-				data.status
-			)}">${frappe.utils.escape_html(data.status || "—")}</span></span>
-          </div>
-        </div>
-
-        ${
-			data.description
-				? `
-        <div class="ar-report-section">
-          <div class="ar-report-section-header">Description</div>
-          <div style="padding: 12px 14px; font-size: 0.85rem; color: #4b5563; line-height: 1.5; white-space: pre-wrap;">${frappe.utils.escape_html(
-				data.description
-			)}</div>
-        </div>`
-				: ""
-		}
-
-        <div class="ar-report-section">
           <div class="ar-report-section-header">Participant Info</div>
           ${
 				data.full_name
@@ -596,16 +562,35 @@ frappe.pages["report_generation"].on_page_load = function (wrapper) {
 							data.participant || "—"
 					  )}</span></div>`
 			}
-          <div class="ar-report-row">
-            <span class="key">Role</span>
-            <span class="val"><span class="ar-badge ${roleBadge(
-				data.participant_type
-			)}">${frappe.utils.escape_html(data.participant_type || "—")}</span></span>
-          </div>
           <div class="ar-report-row"><span class="key">Department</span><span class="val">${frappe.utils.escape_html(
 				data.department || "—"
 			)}</span></div>
         </div>
+        <div class="ar-report-section">
+          <div class="ar-report-section-header">Activity Details</div>
+          <div class="ar-report-row"><span class="key">Event Name</span><span class="val" style="font-weight:700;">${frappe.utils.escape_html(
+				data.event_name || "—"
+			)}</span></div>
+          <div class="ar-report-row"><span class="key">Event Date</span><span class="val">${
+				data.event_date || "—"
+			}</span></div>
+          <div class="ar-report-row"><span class="key">Category</span><span class="val">${frappe.utils.escape_html(
+				data.category || "—"
+			)}</span></div>
+        </div>
+
+        ${
+			data.description
+				? `
+        <div class="ar-report-section">
+          <div class="ar-report-section-header">Description</div>
+          <div style="padding: 12px 14px; font-size: 0.85rem; color: #4b5563; line-height: 1.5; white-space: pre-wrap;">${frappe.utils.escape_html(
+				data.description
+			)}</div>
+        </div>`
+				: ""
+		}
+
 
         ${
 			data.certificate
