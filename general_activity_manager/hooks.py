@@ -28,15 +28,14 @@ fixtures = [
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "general_activity_manager",
-# 		"logo": "/assets/general_activity_manager/logo.png",
-# 		"title": "General Activity Manager",
-# 		"route": "/general_activity_manager",
-# 		"has_permission": "general_activity_manager.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "general_activity_manager",
+		"logo": "/assets/general_activity_manager/images/gecw_logo.jpg",
+		"title": "General Activity Manager",
+		"route": "/general_activity_manager",
+	}
+]
 
 # Includes in <head>
 # ------------------
